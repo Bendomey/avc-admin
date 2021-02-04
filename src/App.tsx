@@ -3,7 +3,7 @@ import { BrowserRouter, Route } from "react-router-dom";
 import { CenterLoader } from "./components/atoms/loadingComponents";
 
 const Login = React.lazy(() => import("./pages/login"));
-// const Layout = React.lazy(() => import("./shared/layout"));
+const Layout = React.lazy(() => import("./shared/layout"));
 
 function App() {
   return (
@@ -12,7 +12,7 @@ function App() {
         <BrowserRouter>
           <React.Suspense fallback={CenterLoader()}>
             <Route exact={true} component={Login} path={"/login"} />
-            {/* <Route exact={false} component={Layout} path={"/"} /> */}
+            <Route exact={false} component={Layout} path={"/"} />
           </React.Suspense>
         </BrowserRouter>
       </div>
