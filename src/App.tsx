@@ -1,25 +1,22 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import * as React from "react";
+import { BrowserRouter, Route } from "react-router-dom";
+import { CenterLoader } from "./components/atoms/loadingComponents";
+
+const Login = React.lazy(() => import("./pages/login"));
+// const Layout = React.lazy(() => import("./shared/layout"));
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <React.Fragment>
+      <div className={"h-screen w-screen bg-background-300"}>
+        <BrowserRouter>
+          <React.Suspense fallback={CenterLoader()}>
+            <Route exact={true} component={Login} path={"/login"} />
+            {/* <Route exact={false} component={Layout} path={"/"} /> */}
+          </React.Suspense>
+        </BrowserRouter>
+      </div>
+    </React.Fragment>
   );
 }
 
