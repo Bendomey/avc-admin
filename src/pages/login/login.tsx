@@ -1,19 +1,20 @@
 import * as React from "react";
 import image from "../../assets/images/logo.png";
+import background from "../../assets/images/background.jpg";
 
 const Login = () => {
   return (
     <React.Fragment>
       <div
         style={{
-          backgroundImage:
-            "url(https://images.unsplash.com/photo-1488998427799-e3362cec87c3?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80)",
+          backgroundImage: "url(" + background + ")",
+
           backgroundPosition: "center",
           backgroundSize: "100% 100%",
           backgroundRepeat: "no-repeat",
         }}
       >
-        <div className="min-h-screen bg-black bg-opacity-90 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+        <div className="min-h-screen bg-black bg-opacity-80 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
           <div className="mt-8 sm:mx-auto sm:w-full md:w-4/12">
             <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
               <div className="sm:mx-auto sm:w-full sm:max-w-md">

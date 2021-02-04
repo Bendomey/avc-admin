@@ -4,7 +4,7 @@ import ClipLoader from "react-spinners/ClipLoader";
 const CenterLoaders = () => {
   return (
     <React.Fragment>
-      <div className={"w-full h-full flex justify-center items-center"}>
+      <div className={"w-screen h-screen flex justify-center items-center"}>
         <ClipLoader color={"#E21E47"} size={40} />
       </div>
     </React.Fragment>

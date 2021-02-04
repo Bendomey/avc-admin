@@ -1,21 +1,21 @@
 import * as React from "react";
-import { BrowserRouter, Route } from "react-router-dom";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
 import { CenterLoader } from "./components/atoms/loadingComponents";
 
 const Login = React.lazy(() => import("./pages/login"));
-// const Layout = React.lazy(() => import("./shared/layout"));
+const Layout = React.lazy(() => import("./shared/layout"));
 
 function App() {
   return (
     <React.Fragment>
-      <div className={"h-screen w-screen bg-background-300"}>
-        <BrowserRouter>
-          <React.Suspense fallback={CenterLoader()}>
+      <BrowserRouter>
+        <React.Suspense fallback={CenterLoader()}>
+          <Switch>
             <Route exact={true} component={Login} path={"/login"} />
-            {/* <Route exact={false} component={Layout} path={"/"} /> */}
-          </React.Suspense>
-        </BrowserRouter>
-      </div>
+            <Route exact={false} component={Layout} path={"/"} />
+          </Switch>
+        </React.Suspense>
+      </BrowserRouter>
     </React.Fragment>
   );
 }
