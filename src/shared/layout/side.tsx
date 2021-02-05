@@ -571,7 +571,7 @@ const SideNav = () => {
                     <span className="truncate">FAQs</span>
                   </Link>
                   <Link
-                    to="/send-newletter"
+                    to="/send-newsletter"
                     className={`${
                       pathname === "/send-newsletter"
                         ? "bg-gray-200"
