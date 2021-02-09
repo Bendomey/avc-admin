@@ -3,13 +3,24 @@ import logo from "../../assets/images/logo.png";
 // import userPng from "../../assets/images/male.jpeg";
 import { useOutsideListener } from "../../components/atoms/Hooks";
 import Transition from "../../components/atoms/transitions";
-import { Link, useLocation } from "react-router-dom";
+import { CornerDialog } from "evergreen-ui";
+import { Link, useHistory, useLocation } from "react-router-dom";
+import { AuthContext } from "../../services/context";
 
 const SideNav = () => {
+  const [{ signOut }] = React.useContext(AuthContext);
   const { pathname } = useLocation();
   const wrapperContainer = React.useRef(null);
   const [showDropdown, setShowDropdown] = React.useState(false);
   useOutsideListener(wrapperContainer, () => setShowDropdown(false));
+  const [logoutReguest, setLogoutRequest] = React.useState(false);
+
+  const { push } = useHistory();
+
+  const handleLogout = () => {
+    signOut();
+    push("/login");
+  };
   return (
     <React.Fragment>
       {/* <!-- Off-canvas menu for mobile, show/hide based on off-canvas menu state. --> */}
@@ -365,7 +376,13 @@ const SideNav = () => {
                     </a>
                   </div>
                   <div className="py-1">
-                    <span className="cursor-pointer block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900">
+                    <span
+                      onClick={() => {
+                        setLogoutRequest(true);
+                        setShowDropdown(false);
+                      }}
+                      className="cursor-pointer block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                    >
                       Logout
                     </span>
                   </div>
@@ -590,6 +607,16 @@ const SideNav = () => {
           </div>
         </div>
       </div>
+
+      <CornerDialog
+        title="Logout Request"
+        isShown={logoutReguest}
+        onCloseComplete={() => setLogoutRequest(!setLogoutRequest)}
+        onConfirm={handleLogout}
+        confirmLabel={"Yes"}
+      >
+        Are you sure you want to logout?
+      </CornerDialog>
     </React.Fragment>
   );
 };

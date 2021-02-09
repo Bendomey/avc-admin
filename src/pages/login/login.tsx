@@ -1,8 +1,67 @@
 import * as React from "react";
 import image from "../../assets/images/logo.png";
 import background from "../../assets/images/background.jpg";
+import { AuthContext } from "../../services/context";
+import { useHistory } from "react-router-dom";
+import cookieConfig from "../../services/cookie.config";
+import { ApolloError, useMutation } from "@apollo/client";
+import {
+  LoginInputProps,
+  LoginOutputProps,
+} from "../../shared/interfaces/login";
+import { LOGIN } from "../../services/graphql/mutations";
+import { toaster } from "evergreen-ui";
+import _ from "lodash";
 
 const Login = () => {
+  const [{ signIn }] = React.useContext(AuthContext);
+  const { push } = useHistory();
+  const [email, setEmail] = React.useState<string>("");
+  const [password, setPassword] = React.useState<string>("");
+
+  React.useEffect(() => {
+    document.title = "Login Administrator - African Venture Counsel";
+    cookieConfig.clearCipher();
+  }, []);
+
+  const [invokeLogin, { loading }] = useMutation<
+    LoginOutputProps,
+    LoginInputProps
+  >(LOGIN);
+
+  const HandleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    toaster.closeAll();
+
+    invokeLogin({
+      variables: {
+        email,
+        password,
+      },
+    })
+      .then(async ({ data }) => {
+        if (data) {
+          await signIn(data?.loginAdmin);
+          push("/");
+        }
+      })
+      .catch((e: ApolloError) => {
+        if (e?.graphQLErrors?.length > 0) {
+          if (
+            ["AdminNotFound", "PasswordIncorrect"].includes(
+              e.graphQLErrors[0]?.message
+            )
+          ) {
+            toaster.danger("Oops, your email address or password is incorrect");
+          } else {
+            toaster.danger(
+              _.startCase(_.camelCase(e.graphQLErrors[0]?.message))
+            );
+          }
+        }
+      });
+  };
+
   return (
     <React.Fragment>
       <div
@@ -27,7 +86,7 @@ const Login = () => {
                 </p>
               </div>
               <div className={"flex flex-col"}>
-                <form className="space-y-4  mt-5" action="#" method="POST">
+                <form onSubmit={HandleSubmit} className="space-y-4  mt-5">
                   <div>
                     <label
                       htmlFor="email"
@@ -43,6 +102,10 @@ const Login = () => {
                         autoComplete="email"
                         required
                         placeholder={"Email here.."}
+                        value={email}
+                        onChange={(
+                          event: React.ChangeEvent<HTMLInputElement>
+                        ) => setEmail(event.target.value)}
                         className="appearance-none block w-full px-3  py-3 border border-gray-300 bg-gray-50 rounded-none shadow-sm placeholder-gray-400 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm"
                       />
                     </div>
@@ -63,6 +126,10 @@ const Login = () => {
                         autoComplete="current-password"
                         required
                         placeholder={"Password here.."}
+                        value={password}
+                        onChange={(
+                          event: React.ChangeEvent<HTMLInputElement>
+                        ) => setPassword(event.target.value)}
                         className="appearance-none block w-full px-3 py-3 border border-gray-300 rounded-none bg-gray-50 shadow-sm placeholder-gray-400 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm"
                       />
                     </div>
@@ -94,9 +161,10 @@ const Login = () => {
                   <div>
                     <button
                       type="submit"
+                      disabled={loading}
                       className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
                     >
-                      Sign in
+                      {loading ? "loading..." : "Sign in"}
                     </button>
                   </div>
                 </form>

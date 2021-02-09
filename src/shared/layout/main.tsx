@@ -1,11 +1,14 @@
 import * as React from "react";
 import SideNav from "./side";
 import { PageLoader } from "../../components/atoms/loadingComponents";
-import { Route } from "react-router-dom";
+import Route from "../../services/protectedRoutes";
 import { RouteType as IRoute } from "../interfaces/misc";
 import routes from "../../routes";
 
 const Layout = () => {
+  React.useEffect(() => {
+    document.title = "Welcome - African Venture Counsel";
+  }, []);
   return (
     <React.Fragment>
       <div className="h-screen flex overflow-hidden bg-white">
@@ -161,6 +164,7 @@ const Layout = () => {
               {routes?.map((route: IRoute, i: number) => (
                 <React.Fragment key={i}>
                   <Route
+                    name={route.name}
                     path={route.path}
                     component={route.component as any}
                     exact={route.exact}
