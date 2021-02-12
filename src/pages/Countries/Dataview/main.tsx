@@ -1,4 +1,5 @@
 import * as React from "react";
+import { Country } from "../../../shared/interfaces/country";
 import CountryCard from "./card";
 
 const CountriesMainDataView = ({
@@ -44,7 +45,7 @@ const CountriesMainDataView = ({
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-100">
-            {data?.map((country: any, i: number) => (
+            {data?.map((country: Country, i: number) => (
               <React.Fragment key={i}>
                 <CountryCard
                   data={country}
