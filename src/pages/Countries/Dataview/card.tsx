@@ -1,11 +1,12 @@
 import * as React from "react";
-// import {format} from 'date-fns'
+import { format } from "date-fns";
+import { Country } from "../../../shared/interfaces/country";
 
 interface Props {
-  data: any;
-  edit: (data: any) => void;
-  remove: (data: any) => void;
-  view: (data: any) => void;
+  data: Country;
+  edit: (data: Country) => void;
+  remove: (data: Country) => void;
+  view: (data: Country) => void;
 }
 
 const CountryCard: React.FC<Props> = ({ data, edit, remove, view }) => {
@@ -24,13 +25,13 @@ const CountryCard: React.FC<Props> = ({ data, edit, remove, view }) => {
           </div>
         </td>
         <td className="px-6 py-3 text-sm text-gray-500 font-medium">
-          {data?.currency || "Not Speficied"}
+          {data?.currency || "N/A"}
         </td>
         <td className="hidden md:table-cell px-6 py-3 whitespace-nowrap text-sm text-gray-500 text-right">
-          March 17, 2020
+          {format(new Date(data?.createdAt), "MMMM dd, yyyy")}
         </td>
         <td className="hidden md:table-cell px-6 py-3 whitespace-nowrap text-sm text-gray-500 text-right">
-          March 17, 2020
+          {format(new Date(data?.updatedAt), "MMMM dd, yyyy")}
         </td>
         <td className="pr-6">
           <div className="relative flex justify-end items-center">
