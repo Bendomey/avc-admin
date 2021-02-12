@@ -8,20 +8,12 @@ import AddComponent from "./Add";
 import EditComponent from "./Edit";
 import DeleteComponent from "./Delete";
 import ViewComponent from "./View";
-
-const data = {
-  countries: [
-    {
-      name: "Ghana",
-      currency: "GHS",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-  ],
-  countriesLength: 1,
-};
-const loading = false;
-const refetch = () => {};
+import { useQuery } from "@apollo/client";
+import { GET_COUNTRIES } from "../../services/graphql/queries";
+import {
+  GetCountriesInputProps,
+  GetCountriesOutputProps,
+} from "../../shared/interfaces/country";
 
 const Countries = () => {
   const [add, setAdd] = React.useState<boolean>(false);
@@ -38,6 +30,11 @@ const Countries = () => {
   React.useEffect(() => {
     setEnd(skip + limit);
   }, [limit, skip]);
+
+  const { data, loading, refetch } = useQuery<
+    GetCountriesOutputProps,
+    GetCountriesInputProps
+  >(GET_COUNTRIES);
 
   return (
     <React.Fragment>
