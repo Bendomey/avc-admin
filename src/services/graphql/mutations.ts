@@ -18,3 +18,46 @@ export const LOGIN = gql`
     }
   }
 `;
+
+//for countries
+export const CREATE_COUNTRY = gql`
+  mutation(
+    $name: String!
+    $currency: String
+    $description: String
+    $image: String
+  ) {
+    createCountry(
+      name: $name
+      currency: $currency
+      description: $description
+      image: $image
+    ) {
+      id
+    }
+  }
+`;
+
+export const UPDATE_COUNTRY = gql`
+  mutation(
+    $id: ID!
+    $name: String
+    $currency: String
+    $description: String
+    $image: String
+  ) {
+    updateCountry(
+      countryId: $id
+      name: $name
+      currency: $currency
+      description: $description
+      image: $image
+    )
+  }
+`;
+
+export const DELETE_COUNTRY = gql`
+  mutation($id: ID!) {
+    deleteCountry(countryId: $id)
+  }
+`;

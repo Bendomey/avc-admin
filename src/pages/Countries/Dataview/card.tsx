@@ -1,11 +1,15 @@
 import * as React from "react";
-// import {format} from 'date-fns'
+import { format } from "date-fns";
+import { Country } from "../../../shared/interfaces/country";
 
 interface Props {
-  data: any;
+  data: Country;
+  edit: (data: Country) => void;
+  remove: (data: Country) => void;
+  view: (data: Country) => void;
 }
 
-const CountryCard: React.FC<Props> = ({ data }) => {
+const CountryCard: React.FC<Props> = ({ data, edit, remove, view }) => {
   return (
     <React.Fragment>
       <tr>
@@ -21,17 +25,50 @@ const CountryCard: React.FC<Props> = ({ data }) => {
           </div>
         </td>
         <td className="px-6 py-3 text-sm text-gray-500 font-medium">
-          {data?.currency || "Not Speficied"}
+          {data?.currency || "N/A"}
         </td>
         <td className="hidden md:table-cell px-6 py-3 whitespace-nowrap text-sm text-gray-500 text-right">
-          March 17, 2020
+          {format(new Date(data?.createdAt), "MMMM dd, yyyy")}
         </td>
         <td className="hidden md:table-cell px-6 py-3 whitespace-nowrap text-sm text-gray-500 text-right">
-          March 17, 2020
+          {format(new Date(data?.updatedAt), "MMMM dd, yyyy")}
         </td>
         <td className="pr-6">
           <div className="relative flex justify-end items-center">
             <button
+              onClick={() => {
+                view(data);
+              }}
+              id="project-options-menu-0"
+              aria-haspopup="true"
+              type="button"
+              className="w-8 h-8 mr-2 bg-white inline-flex items-center justify-center text-gray-400 rounded-full hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+            >
+              <svg
+                className="w-5 h-5"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                />
+              </svg>
+            </button>
+            <button
+              onClick={() => {
+                edit(data);
+              }}
               id="project-options-menu-0"
               aria-haspopup="true"
               type="button"
@@ -53,6 +90,9 @@ const CountryCard: React.FC<Props> = ({ data }) => {
               </svg>
             </button>
             <button
+              onClick={() => {
+                remove(data);
+              }}
               id="project-options-menu-0"
               aria-haspopup="true"
               type="button"

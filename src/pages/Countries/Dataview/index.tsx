@@ -14,6 +14,7 @@ const DataView = ({
   setEnd,
   edit,
   view,
+  remove,
 }: any) => {
   return (
     <Fragment>
@@ -37,6 +38,7 @@ const DataView = ({
         setEnd={setEnd}
         view={view}
         edit={edit}
+        remove={remove}
       />
     </Fragment>
   );
