@@ -1,17 +1,31 @@
+import { useMutation, ApolloError } from "@apollo/client";
 import * as React from "react";
 import { BasicModal } from "../../../components/atoms/modal";
+import { UPDATE_COUNTRY } from "../../../services/graphql/mutations";
+import {
+  Country,
+  UpdateCountryInputProps,
+  UpdateCountryOutputProps,
+} from "../../../shared/interfaces/country";
+import _ from "lodash";
+import { toaster } from "evergreen-ui";
 
 interface Props {
   show: boolean;
   setShow: React.Dispatch<React.SetStateAction<boolean>>;
   refetch: any;
-  data: any;
+  data: Country;
 }
 
-const EditCountry: React.FC<Props> = ({ setShow, show, data }) => {
+const EditCountry: React.FC<Props> = ({ setShow, show, data, refetch }) => {
   const [name, setName] = React.useState<string>("");
   const [currency, setCurrency] = React.useState<string>("");
   const [description, setDescription] = React.useState<string>("");
+
+  const [updateInvoker, { loading }] = useMutation<
+    UpdateCountryOutputProps,
+    UpdateCountryInputProps
+  >(UPDATE_COUNTRY);
 
   React.useEffect(() => {
     if (data) {
@@ -20,6 +34,31 @@ const EditCountry: React.FC<Props> = ({ setShow, show, data }) => {
       setDescription(data?.description || "");
     }
   }, [data]);
+
+  const HandleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    updateInvoker({
+      variables: {
+        id: data?.id,
+        name: name.trim(),
+        currency: currency || undefined,
+        description: description || undefined,
+      },
+    })
+      .then(() => {
+        refetch();
+        toaster.success(name + " updated successfully");
+        setShow(false);
+      })
+      .catch((e: ApolloError) => {
+        if (e?.graphQLErrors?.length > 0) {
+          return toaster.warning(
+            _.startCase(_.camelCase(e?.graphQLErrors[0]?.message))
+          );
+        }
+      });
+  };
   return (
     <React.Fragment>
       <BasicModal show={show} setShow={setShow}>
@@ -49,7 +88,7 @@ const EditCountry: React.FC<Props> = ({ setShow, show, data }) => {
 
           <div className="mt-2 p-5">
             <span className={"font-bold"}>Update Country</span>
-            <form className={"mt-3"}>
+            <form onSubmit={HandleSubmit} className={"mt-3"}>
               <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-6">
                 <div className="sm:col-span-6">
                   <label
@@ -99,7 +138,6 @@ const EditCountry: React.FC<Props> = ({ setShow, show, data }) => {
                   </label>
                   <div className="mt-1 rounded-none shadow-sm">
                     <textarea
-                      required
                       value={description}
                       rows={5}
                       onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -115,6 +153,7 @@ const EditCountry: React.FC<Props> = ({ setShow, show, data }) => {
                 <span className="inline-flex rounded-none shadow-sm mr-2 ">
                   <button
                     type="button"
+                    disabled={loading}
                     onClick={() => setShow(false)}
                     className="inline-flex rounded-none items-center px-6 py-2 border border-red-500 text-sm leading-5 font-light text-red-500 hover:text-white bg-white hover:bg-red-400 focus:outline-none focus:shadow-outline-blue focus:border-red-600 active:bg-blue-600 transition duration-150 ease-in-out"
                   >
@@ -123,10 +162,11 @@ const EditCountry: React.FC<Props> = ({ setShow, show, data }) => {
                 </span>
                 <span className="inline-flex rounded-none shadow-sm ">
                   <button
-                    type="button"
+                    disabled={loading}
+                    type="submit"
                     className="inline-flex items-center px-4 py-2 border border-transparent text-sm leading-5 font-light rounded-none text-white bg-red-500 hover:bg-red-400 focus:outline-none focus:shadow-outline-teal focus:border-red-600 active:bg-blue-600 transition duration-150 ease-in-out"
                   >
-                    Add Country
+                    {loading ? "Updating..." : "Update Country"}
                   </button>
                 </span>
               </div>
