@@ -12,6 +12,7 @@ const CountriesMainDataView = ({
   view,
   edit,
   refetch,
+  remove,
 }: any) => {
   const [page, setPage] = React.useState([1]);
   React.useEffect(() => {
@@ -45,7 +46,12 @@ const CountriesMainDataView = ({
           <tbody className="bg-white divide-y divide-gray-100">
             {data?.map((country: any, i: number) => (
               <React.Fragment key={i}>
-                <CountryCard data={country} />
+                <CountryCard
+                  data={country}
+                  edit={edit}
+                  remove={remove}
+                  view={view}
+                />
               </React.Fragment>
             ))}
           </tbody>
