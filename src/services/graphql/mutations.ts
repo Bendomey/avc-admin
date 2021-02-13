@@ -61,3 +61,30 @@ export const DELETE_COUNTRY = gql`
     deleteCountry(countryId: $id)
   }
 `;
+
+//for admins
+export const CREATE_ADMIN = gql`
+  mutation($name: String!, $email: String!, $role: AdminRole!) {
+    createAdmin(fullname: $name, email: $email, role: $role) {
+      id
+    }
+  }
+`;
+
+export const UPDATE_ADMIN = gql`
+  mutation($id: ID!, $role: AdminRole) {
+    updateAdminDetails(adminId: $id, role: $role)
+  }
+`;
+
+export const SUSPEND_ADMIN = gql`
+  mutation($id: ID!, $reason: String!) {
+    suspendAdmin(adminId: $id, reason: $reason)
+  }
+`;
+
+export const RESTORE_ADMIN = gql`
+  mutation($id: ID!) {
+    restoreAdmin(adminId: $id)
+  }
+`;
