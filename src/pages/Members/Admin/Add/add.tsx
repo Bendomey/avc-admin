@@ -110,6 +110,7 @@ const AddCountry: React.FC<Props> = ({ setShow, show, refetch }) => {
                   </label>
                   <div className="mt-1 rounded-none shadow-sm">
                     <input
+                      required={true}
                       type="email"
                       value={email}
                       onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -130,6 +131,7 @@ const AddCountry: React.FC<Props> = ({ setShow, show, refetch }) => {
                   <div className="mt-1 rounded-none shadow-sm">
                     <select
                       value={role}
+                      required={true}
                       onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
                         setRole(e.target.value);
                       }}
