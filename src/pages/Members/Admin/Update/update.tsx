@@ -5,7 +5,6 @@ import { BasicModal } from "../../../../components/atoms/modal";
 import _ from "lodash";
 import { UPDATE_ADMIN } from "../../../../services/graphql/mutations";
 import {
-  Admin,
   UpdateAdminInputProps,
   UpdateAdminOutputProps,
 } from "../../../../shared/interfaces/admin";
