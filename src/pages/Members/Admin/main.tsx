@@ -7,10 +7,15 @@ import DataView from "./Dataview";
 import AddComponent from "./Add";
 import { useQuery } from "@apollo/client";
 import {
+  Admin,
   GetAdminsInputProps,
   GetAdminsOutputProps,
 } from "../../../shared/interfaces/admin";
 import { GET_ADMINS } from "../../../services/graphql/queries";
+import ViewAdmin from "./View";
+import Updatedmin from "./Update";
+import SuspendAdmin from "./Suspend";
+import RestoreAdmin from "./Restore";
 
 interface Props {
   add: boolean;
@@ -18,6 +23,12 @@ interface Props {
 }
 
 const ManageAdmins: React.FC<Props> = ({ add, setAdd }) => {
+  const [view, setView] = React.useState<boolean>(false);
+  const [update, setUpdate] = React.useState<boolean>(false);
+  const [suspend, setSuspend] = React.useState<boolean>(false);
+  const [restore, setRestore] = React.useState<boolean>(false);
+  const [selected, setSelected] = React.useState<Admin | null>(null);
+
   //for pagination
   const [limit, setLimit] = React.useState<number>(12);
   const [skip, setSkip] = React.useState<number>(0);
@@ -58,17 +69,21 @@ const ManageAdmins: React.FC<Props> = ({ add, setAdd }) => {
                       setSkip={setSkip}
                       end={end}
                       setEnd={setEnd}
-                      view={(dataFromDataView: any) => {
-                        // setSelected(dataFromDataView);
-                        // setView(true);
+                      view={(dataFromDataView: Admin) => {
+                        setSelected(dataFromDataView);
+                        setView(true);
                       }}
                       edit={(dataFromDataView: any) => {
-                        // setSelected(dataFromDataView);
-                        // setEdit(true);
+                        setSelected(dataFromDataView);
+                        setUpdate(true);
                       }}
-                      remove={(dataFromDataView: any) => {
-                        // setSelected(dataFromDataView);
-                        // setRemove(true);
+                      remove={(dataFromDataView: Admin) => {
+                        setSelected(dataFromDataView);
+                        if (dataFromDataView?.suspendedAt) {
+                          setRestore(true);
+                        } else {
+                          setSuspend(true);
+                        }
                       }}
                     />
                   </div>
@@ -83,6 +98,25 @@ const ManageAdmins: React.FC<Props> = ({ add, setAdd }) => {
         </React.Fragment>
       )}
       <AddComponent show={add} setShow={setAdd} refetch={refetch} />
+      <ViewAdmin show={view} setShow={setView} data={selected} />
+      <Updatedmin
+        show={update}
+        setShow={setUpdate}
+        refetch={refetch}
+        data={selected}
+      />
+      <SuspendAdmin
+        show={suspend}
+        setShow={setSuspend}
+        refetch={refetch}
+        data={selected}
+      />
+      <RestoreAdmin
+        show={restore}
+        setShow={setRestore}
+        refetch={refetch}
+        data={selected}
+      />
     </React.Fragment>
   );
 };

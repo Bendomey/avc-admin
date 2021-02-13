@@ -1,45 +1,41 @@
-import { ApolloError, useMutation } from "@apollo/client";
-import { toaster } from "evergreen-ui";
+import { useMutation, ApolloError } from "@apollo/client";
 import * as React from "react";
 import { BasicModal } from "../../../../components/atoms/modal";
+import { SUSPEND_ADMIN } from "../../../../services/graphql/mutations";
+import { toaster } from "evergreen-ui";
 import _ from "lodash";
-import { CREATE_ADMIN } from "../../../../services/graphql/mutations";
 import {
-  CreateAdminInputProps,
-  CreateAdminOutputProps,
+  SuspendAdminInputProps,
+  SuspendAdminOutputProps,
 } from "../../../../shared/interfaces/admin";
+
 interface Props {
   show: boolean;
   setShow: React.Dispatch<React.SetStateAction<boolean>>;
   refetch: any;
+  data: any;
 }
 
-const AddCountry: React.FC<Props> = ({ setShow, show, refetch }) => {
-  const [name, setName] = React.useState<string>("");
-  const [email, setEmail] = React.useState<string>("");
-  const [role, setRole] = React.useState<string>("");
-
-  const [addInvoker, { loading }] = useMutation<
-    CreateAdminOutputProps,
-    CreateAdminInputProps
-  >(CREATE_ADMIN);
+const SuspendAdmin: React.FC<Props> = ({ setShow, show, data, refetch }) => {
+  const [reason, setReason] = React.useState<string>("");
+  const [suspendInvoker, { loading }] = useMutation<
+    SuspendAdminOutputProps,
+    SuspendAdminInputProps
+  >(SUSPEND_ADMIN);
 
   const HandleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    addInvoker({
+
+    suspendInvoker({
       variables: {
-        name: name.trim(),
-        email: email.trim(),
-        role,
+        id: data?.id,
+        reason,
       },
     })
       .then(() => {
         refetch();
-        toaster.success("Added " + name + " successfully");
+        toaster.success(data?.fullname + " has been suspended successfully");
         setShow(false);
-        setName("");
-        setRole("");
-        setEmail("");
       })
       .catch((e: ApolloError) => {
         if (e?.graphQLErrors?.length > 0) {
@@ -78,69 +74,31 @@ const AddCountry: React.FC<Props> = ({ setShow, show, refetch }) => {
           </div>
 
           <div className="mt-2 p-5">
-            <span className={"font-bold"}>Add Admin</span>
-            <form onSubmit={HandleSubmit} className={"mt-3"}>
+            <span className={"font-bold"}>Suspend Admin</span>
+            <div className="text-sm">
+              <span>Are you sure you want to suspend {data?.fullname} ?</span>
+            </div>
+
+            <form onSubmit={HandleSubmit} className={"mt-3 w-full"}>
               <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-6">
                 <div className="sm:col-span-6">
                   <label
                     htmlFor="first_name"
                     className="block text-sm font-medium leading-5 text-gray-700"
                   >
-                    Full Name <span className={"text-red-400"}>*</span>
+                    Reason
                   </label>
                   <div className="mt-1 rounded-none shadow-sm">
-                    <input
-                      type="text"
+                    <textarea
+                      value={reason}
+                      rows={5}
                       required
-                      value={name}
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                        setName(e.target.value);
+                      onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
+                        setReason(e.target.value);
                       }}
                       className="shadow-sm font-light focus:outline-none block w-full sm:text-sm border-gray-300 rounded-none"
-                      placeholder="Full name here ..."
-                    />
-                  </div>
-                </div>
-                <div className="sm:col-span-6">
-                  <label
-                    htmlFor="first_name"
-                    className="block text-sm font-medium leading-5 text-gray-700"
-                  >
-                    Email
-                  </label>
-                  <div className="mt-1 rounded-none shadow-sm">
-                    <input
-                      required={true}
-                      type="email"
-                      value={email}
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                        setEmail(e.target.value);
-                      }}
-                      className="shadow-sm font-light focus:outline-none block w-full sm:text-sm border-gray-300 rounded-none"
-                      placeholder="Email here ..."
-                    />
-                  </div>
-                </div>
-                <div className="sm:col-span-6">
-                  <label
-                    htmlFor="first_name"
-                    className="block text-sm font-medium leading-5 text-gray-700"
-                  >
-                    Role
-                  </label>
-                  <div className="mt-1 rounded-none shadow-sm">
-                    <select
-                      value={role}
-                      required={true}
-                      onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-                        setRole(e.target.value);
-                      }}
-                      className="shadow-sm font-light focus:outline-none block w-full sm:text-sm border-gray-300 rounded-none"
-                    >
-                      <option value="">Please select</option>
-                      <option value="Admin">Admin</option>
-                      <option value="User">User</option>
-                    </select>
+                      placeholder="Reason for suspension here ..."
+                    ></textarea>
                   </div>
                 </div>
               </div>
@@ -161,7 +119,7 @@ const AddCountry: React.FC<Props> = ({ setShow, show, refetch }) => {
                     type="submit"
                     className="inline-flex items-center px-4 py-2 border border-transparent text-sm leading-5 font-light rounded-none text-white bg-red-500 hover:bg-red-400 focus:outline-none focus:shadow-outline-teal focus:border-red-600 active:bg-blue-600 transition duration-150 ease-in-out"
                   >
-                    {loading ? "Adding..." : "Add Admin"}
+                    {loading ? " Suspending..." : "Yes, suspend"}
                   </button>
                 </span>
               </div>
@@ -173,4 +131,4 @@ const AddCountry: React.FC<Props> = ({ setShow, show, refetch }) => {
   );
 };
 
-export default AddCountry;
+export default SuspendAdmin;

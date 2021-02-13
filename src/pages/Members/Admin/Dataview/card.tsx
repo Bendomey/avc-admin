@@ -1,14 +1,17 @@
 import * as React from "react";
 import { format } from "date-fns";
+import { Admin } from "../../../../shared/interfaces/admin";
+import { AuthContext } from "../../../../services/context";
 
 interface Props {
-  data: any;
-  edit: (data: any) => void;
-  remove: (data: any) => void;
-  view: (data: any) => void;
+  data: Admin;
+  edit: (data: Admin) => void;
+  remove: (data: Admin) => void;
+  view: (data: Admin) => void;
 }
 
 const AdminCard: React.FC<Props> = ({ data, edit, remove, view }) => {
+  const [, state] = React.useContext(AuthContext);
   return (
     <React.Fragment>
       <tr>
@@ -79,30 +82,60 @@ const AdminCard: React.FC<Props> = ({ data, edit, remove, view }) => {
                 />
               </svg>
             </button>
-            <button
-              onClick={() => {
-                edit(data);
-              }}
-              id="project-options-menu-0"
-              aria-haspopup="true"
-              type="button"
-              className="w-8 h-8 mr-2 bg-white inline-flex items-center justify-center text-gray-400 rounded-full hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-            >
-              <svg
-                className="w-5 h-5"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                />
-              </svg>
-            </button>
+
+            {state?.userToken?.admin?.id !== data?.id && (
+              <React.Fragment>
+                <button
+                  onClick={() => {
+                    edit(data);
+                  }}
+                  id="project-options-menu-0"
+                  aria-haspopup="true"
+                  type="button"
+                  className="w-8 h-8 mr-2 bg-white inline-flex items-center justify-center text-gray-400 rounded-full hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                >
+                  <svg
+                    className="w-5 h-5"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                    />
+                  </svg>
+                </button>
+                <button
+                  onClick={() => {
+                    remove(data);
+                  }}
+                  id="project-options-menu-0"
+                  aria-haspopup="true"
+                  type="button"
+                  className="w-8 h-8 mr-2 bg-white inline-flex items-center justify-center text-gray-400 rounded-full hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                >
+                  <svg
+                    className="w-5 h-5"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M8 9l4-4 4 4m0 6l-4 4-4-4"
+                    />
+                  </svg>
+                </button>
+              </React.Fragment>
+            )}
+
             {/* <button
               onClick={() => {
                 remove(data);
