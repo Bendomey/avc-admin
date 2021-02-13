@@ -3,7 +3,6 @@ import { EmptyAlertComponent } from "../../../components/atoms/alertComponents";
 import ErrorAssetComponent from "../../../components/atoms/alertComponents/error";
 import { DataLoader } from "../../../components/atoms/loadingComponents";
 import DataView from "./Dataview";
-
 import AddComponent from "./Add";
 import { useQuery } from "@apollo/client";
 import {
