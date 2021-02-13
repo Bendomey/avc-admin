@@ -1,4 +1,5 @@
 import * as React from "react";
+import { Admin } from "../../../../shared/interfaces/admin";
 import AdminCard from "./card";
 
 const CountriesMainDataView = ({
@@ -51,7 +52,7 @@ const CountriesMainDataView = ({
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-100">
-            {data?.map((admin: any, i: number) => (
+            {data?.map((admin: Admin, i: number) => (
               <React.Fragment key={i}>
                 <AdminCard
                   data={admin}
