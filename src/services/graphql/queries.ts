@@ -14,3 +14,21 @@ export const GET_COUNTRIES = gql`
     countriesLength(filter: $filter)
   }
 `;
+
+//get admins
+export const GET_ADMINS = gql`
+  query($filter: GetAdminsFilter, $skip: Int, $limit: Int) {
+    admins(filter: $filter, pagination: { skip: $skip, limit: $limit }) {
+      id
+      fullname
+      email
+      phone
+      role
+      suspendedAt
+      suspendedReason
+      createdAt
+      updatedAt
+    }
+    adminsLength(filter: $filter)
+  }
+`;
