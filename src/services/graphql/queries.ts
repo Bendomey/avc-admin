@@ -32,3 +32,42 @@ export const GET_ADMINS = gql`
     adminsLength(filter: $filter)
   }
 `;
+
+//get lawyers
+export const GET_LAWYERS = gql`
+  query($filter: GetLawyersFilter, $skip: Int, $limit: Int) {
+    lawyers(filter: $filter, pagination: { skip: $skip, limit: $limit }) {
+      id
+      user {
+        id
+        lastName
+        otherNames
+        firstName
+        email
+        phone
+        setupAt
+        suspendedAt
+        createdAt
+        updatedAt
+      }
+      addressCountry
+      addressCity
+      addressNumber
+      addressStreetNumber
+      barMembershipCard
+      coverLetter
+      approvedAt
+      cv
+      digitalAddress
+      firstYearOfBarAdmission
+      lawCertificate
+      licenseNumber
+      nationalIDBack
+      nationalIDFront
+      tin
+      createdAt
+      updatedAt
+    }
+    lawyersLength(filter: $filter)
+  }
+`;
