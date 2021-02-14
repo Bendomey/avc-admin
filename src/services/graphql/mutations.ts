@@ -88,3 +88,21 @@ export const RESTORE_ADMIN = gql`
     restoreAdmin(adminId: $id)
   }
 `;
+
+export const SUSPEND_USER = gql`
+  mutation($id: ID!, $reason: String!) {
+    suspendUser(userId: $id, reason: $reason)
+  }
+`;
+
+export const RESTORE_USER = gql`
+  mutation($id: ID!) {
+    restoreUser(userId: $id)
+  }
+`;
+
+export const APPROVE_LAWYER = gql`
+  mutation($id: ID!) {
+    approveLawyer(lawyerId: $id)
+  }
+`;
