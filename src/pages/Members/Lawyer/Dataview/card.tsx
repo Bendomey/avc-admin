@@ -132,9 +132,9 @@ const LawyerCard: React.FC<Props> = ({ data, edit, remove, view }) => {
                   className="w-8 h-8 mr-2 bg-white inline-flex items-center justify-center text-gray-400 rounded-full hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
                 >
                   <svg
-                    className="w-5 h-5"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
+                    className="w-5 h-5"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
                   >
@@ -142,7 +142,7 @@ const LawyerCard: React.FC<Props> = ({ data, edit, remove, view }) => {
                       strokeLinecap="round"
                       strokeLinejoin="round"
                       strokeWidth={2}
-                      d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                      d="M5 13l4 4L19 7"
                     />
                   </svg>
                 </button>

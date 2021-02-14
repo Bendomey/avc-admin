@@ -7,6 +7,7 @@ import DataView from "./Dataview";
 import ViewLawyer from "./View";
 import SuspendLawyer from "./Suspend";
 import RestoreLawyer from "./Restore";
+import ApproveLawyer from "./Approve";
 import {
   GetLawyersInputProps,
   GetLawyersOutputProps,
@@ -18,6 +19,7 @@ import { GET_LAWYERS } from "../../../services/graphql/queries";
 const ManageLawyers = () => {
   const [view, setView] = React.useState<boolean>(false);
   const [suspend, setSuspend] = React.useState<boolean>(false);
+  const [approve, setApprove] = React.useState<boolean>(false);
   const [restore, setRestore] = React.useState<boolean>(false);
   const [selected, setSelected] = React.useState<Lawyer | null>(null);
 
@@ -66,7 +68,7 @@ const ManageLawyers = () => {
                       }}
                       edit={(dataFromDataView: Lawyer) => {
                         setSelected(dataFromDataView);
-                        // setUpdate(true);
+                        setApprove(true);
                       }}
                       remove={(dataFromDataView: Lawyer) => {
                         setSelected(dataFromDataView);
@@ -100,6 +102,12 @@ const ManageLawyers = () => {
       <RestoreLawyer
         show={restore}
         setShow={setRestore}
+        refetch={refetch}
+        data={selected}
+      />
+      <ApproveLawyer
+        show={approve}
+        setShow={setApprove}
         refetch={refetch}
         data={selected}
       />
