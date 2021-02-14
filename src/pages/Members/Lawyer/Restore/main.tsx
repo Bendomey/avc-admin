@@ -1,13 +1,13 @@
-import { useMutation } from "@apollo/client";
+import { ApolloError, useMutation } from "@apollo/client";
 import * as React from "react";
 import { BasicModal } from "../../../../components/atoms/modal";
-import { RESTORE_ADMIN } from "../../../../services/graphql/mutations";
-// import { toaster } from "evergreen-ui";
-// import _ from "lodash";
+import { RESTORE_USER } from "../../../../services/graphql/mutations";
+import { toaster } from "evergreen-ui";
+import _ from "lodash";
 import {
-  RestoreAdminInputProps,
-  RestoreAdminOutputProps,
-} from "../../../../shared/interfaces/admin";
+  RestoreLawyersInputProps,
+  RestoreLawyersOutputProps,
+} from "../../../../shared/interfaces/lawyer";
 
 interface Props {
   show: boolean;
@@ -17,31 +17,31 @@ interface Props {
 }
 
 const RestoreLawyer: React.FC<Props> = ({ setShow, show, data, refetch }) => {
-  const [, { loading }] = useMutation<
-    RestoreAdminOutputProps,
-    RestoreAdminInputProps
-  >(RESTORE_ADMIN);
+  const [restoreInvoker, { loading }] = useMutation<
+    RestoreLawyersOutputProps,
+    RestoreLawyersInputProps
+  >(RESTORE_USER);
 
   const HandleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    // restoreInvoker({
-    //   variables: {
-    //     id: data?.id,
-    //   },
-    // })
-    //   .then(() => {
-    //     refetch();
-    //     toaster.success(data?.fullname + " has been restored successfully");
-    //     setShow(false);
-    //   })
-    //   .catch((e: ApolloError) => {
-    //     if (e?.graphQLErrors?.length > 0) {
-    //       return toaster.warning(
-    //         _.startCase(_.camelCase(e?.graphQLErrors[0]?.message))
-    //       );
-    //     }
-    //   });
+    restoreInvoker({
+      variables: {
+        id: data?.user?.id,
+      },
+    })
+      .then(() => {
+        refetch();
+        toaster.success(data?.fullname + " has been restored successfully");
+        setShow(false);
+      })
+      .catch((e: ApolloError) => {
+        if (e?.graphQLErrors?.length > 0) {
+          return toaster.warning(
+            _.startCase(_.camelCase(e?.graphQLErrors[0]?.message))
+          );
+        }
+      });
   };
 
   return (
