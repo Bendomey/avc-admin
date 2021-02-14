@@ -32,3 +32,31 @@ export interface GetLawyersOutputProps {
   lawyers: Lawyer[];
   lawyersLength: number;
 }
+
+//approve
+export interface ApproveLawyersInputProps {
+  id: string;
+}
+
+export interface ApproveLawyersOutputProps {
+  approveLawyer: boolean;
+}
+
+//suspend
+export interface SuspendLawyersInputProps {
+  id: string;
+  reason: string;
+}
+
+export interface SuspendLawyersOutputProps {
+  suspendUser: boolean;
+}
+
+//restore
+export interface RestoreLawyersInputProps {
+  id: string;
+}
+
+export interface RestoreLawyersOutputProps {
+  restoreUser: boolean;
+}
