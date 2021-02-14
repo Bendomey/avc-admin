@@ -1,13 +1,13 @@
-import { useMutation } from "@apollo/client";
+import { ApolloError, useMutation } from "@apollo/client";
 import * as React from "react";
 import { BasicModal } from "../../../../components/atoms/modal";
-import { SUSPEND_ADMIN } from "../../../../services/graphql/mutations";
-// import { toaster } from "evergreen-ui";
-// import _ from "lodash";
+import { SUSPEND_USER } from "../../../../services/graphql/mutations";
+import { toaster } from "evergreen-ui";
+import _ from "lodash";
 import {
-  SuspendAdminInputProps,
-  SuspendAdminOutputProps,
-} from "../../../../shared/interfaces/admin";
+  SuspendLawyersInputProps,
+  SuspendLawyersOutputProps,
+} from "../../../../shared/interfaces/lawyer";
 
 interface Props {
   show: boolean;
@@ -18,32 +18,34 @@ interface Props {
 
 const SuspendAdmin: React.FC<Props> = ({ setShow, show, data, refetch }) => {
   const [reason, setReason] = React.useState<string>("");
-  const [, { loading }] = useMutation<
-    SuspendAdminOutputProps,
-    SuspendAdminInputProps
-  >(SUSPEND_ADMIN);
+  const [suspendInvoker, { loading }] = useMutation<
+    SuspendLawyersOutputProps,
+    SuspendLawyersInputProps
+  >(SUSPEND_USER);
 
   const HandleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    // suspendInvoker({
-    //   variables: {
-    //     id: data?.id,
-    //     reason,
-    //   },
-    // })
-    //   .then(() => {
-    //     refetch();
-    //     toaster.success(data?.user?.fullName + " has been suspended successfully");
-    //     setShow(false);
-    //   })
-    //   .catch((e: ApolloError) => {
-    //     if (e?.graphQLErrors?.length > 0) {
-    //       return toaster.warning(
-    //         _.startCase(_.camelCase(e?.graphQLErrors[0]?.message))
-    //       );
-    //     }
-    //   });
+    suspendInvoker({
+      variables: {
+        id: data?.user?.id,
+        reason,
+      },
+    })
+      .then(() => {
+        refetch();
+        toaster.success(
+          data?.user?.fullName + " has been suspended successfully"
+        );
+        setShow(false);
+      })
+      .catch((e: ApolloError) => {
+        if (e?.graphQLErrors?.length > 0) {
+          return toaster.warning(
+            _.startCase(_.camelCase(e?.graphQLErrors[0]?.message))
+          );
+        }
+      });
   };
 
   return (
