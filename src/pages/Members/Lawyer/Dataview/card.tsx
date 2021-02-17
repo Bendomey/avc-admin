@@ -17,7 +17,7 @@ const LawyerCard: React.FC<Props> = ({ data, edit, remove, view }) => {
         <td className="px-6 py-3 max-w-0 w-full whitespace-nowrap text-sm font-medium text-gray-900">
           <div className="flex items-center space-x-3 lg:pl-2">
             <div
-              className="flex-shrink-0 w-2.5 h-2.5 rounded-full bg-pink-600"
+              className="flex-shrink-0 w-2.5 h-2.5 rounded-full bg-green-600"
               aria-hidden="true"
             ></div>
             <span className="truncate hover:text-gray-600">
