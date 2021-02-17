@@ -71,3 +71,40 @@ export const GET_LAWYERS = gql`
     lawyersLength(filter: $filter)
   }
 `;
+
+//get customers
+export const GET_CUSTOMERS = gql`
+  query($filter: GetCustomersFilter, $skip: Int, $limit: Int) {
+    customers(filter: $filter, pagination: { skip: $skip, limit: $limit }) {
+      id
+      user {
+        id
+        lastName
+        otherNames
+        firstName
+        email
+        phone
+        setupAt
+        suspendedAt
+        createdAt
+        updatedAt
+      }
+      addressCountry
+      addressCity
+      addressNumber
+      addressStreetNumber
+      digitalAddress
+      tin
+      companyName
+      type
+      companyEntityType
+      companyEntityTypeOther
+      companyDateOfRegistration
+      companyCountryOfRegistration
+      companyRegistrationNumber
+      createdAt
+      updatedAt
+    }
+    customersLength(filter: $filter)
+  }
+`;
