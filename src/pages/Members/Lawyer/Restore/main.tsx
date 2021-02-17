@@ -32,7 +32,7 @@ const RestoreLawyer: React.FC<Props> = ({ setShow, show, data, refetch }) => {
     })
       .then(() => {
         refetch();
-        toaster.success(data?.fullname + " has been restored successfully");
+        toaster.success("Lawyer has been restored successfully");
         setShow(false);
       })
       .catch((e: ApolloError) => {

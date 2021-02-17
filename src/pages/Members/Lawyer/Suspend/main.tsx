@@ -34,9 +34,7 @@ const SuspendAdmin: React.FC<Props> = ({ setShow, show, data, refetch }) => {
     })
       .then(() => {
         refetch();
-        toaster.success(
-          data?.user?.fullName + " has been suspended successfully"
-        );
+        toaster.success("Lawyer has been suspended successfully");
         setShow(false);
       })
       .catch((e: ApolloError) => {
