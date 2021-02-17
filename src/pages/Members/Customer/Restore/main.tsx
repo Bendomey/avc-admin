@@ -1,12 +1,12 @@
 import { ApolloError, useMutation } from "@apollo/client";
 import * as React from "react";
 import { BasicModal } from "../../../../components/atoms/modal";
-import { SUSPEND_USER } from "../../../../services/graphql/mutations";
+import { RESTORE_USER } from "../../../../services/graphql/mutations";
 import { toaster } from "evergreen-ui";
 import _ from "lodash";
 import {
-  SuspendLawyersInputProps,
-  SuspendLawyersOutputProps,
+  RestoreLawyersInputProps,
+  RestoreLawyersOutputProps,
 } from "../../../../shared/interfaces/lawyer";
 
 interface Props {
@@ -16,25 +16,23 @@ interface Props {
   data: any;
 }
 
-const SuspendAdmin: React.FC<Props> = ({ setShow, show, data, refetch }) => {
-  const [reason, setReason] = React.useState<string>("");
-  const [suspendInvoker, { loading }] = useMutation<
-    SuspendLawyersOutputProps,
-    SuspendLawyersInputProps
-  >(SUSPEND_USER);
+const RestoreLawyer: React.FC<Props> = ({ setShow, show, data, refetch }) => {
+  const [restoreInvoker, { loading }] = useMutation<
+    RestoreLawyersOutputProps,
+    RestoreLawyersInputProps
+  >(RESTORE_USER);
 
   const HandleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    suspendInvoker({
+    restoreInvoker({
       variables: {
         id: data?.user?.id,
-        reason,
       },
     })
       .then(() => {
         refetch();
-        toaster.success("Lawyer has been suspended successfully");
+        toaster.success("Customer has been restored successfully");
         setShow(false);
       })
       .catch((e: ApolloError) => {
@@ -74,36 +72,14 @@ const SuspendAdmin: React.FC<Props> = ({ setShow, show, data, refetch }) => {
           </div>
 
           <div className="mt-2 p-5">
-            <span className={"font-bold"}>Suspend Lawyer</span>
+            <span className={"font-bold"}>Restore Customer</span>
             <div className="text-sm">
               <span>
-                Are you sure you want to suspend {data?.user?.lastName} ?
+                Are you sure you want to restore {data?.user?.lastName}?
               </span>
             </div>
 
             <form onSubmit={HandleSubmit} className={"mt-3 w-full"}>
-              <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-6">
-                <div className="sm:col-span-6">
-                  <label
-                    htmlFor="first_name"
-                    className="block text-sm font-medium leading-5 text-gray-700"
-                  >
-                    Reason
-                  </label>
-                  <div className="mt-1 rounded-none shadow-sm">
-                    <textarea
-                      value={reason}
-                      rows={5}
-                      required
-                      onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
-                        setReason(e.target.value);
-                      }}
-                      className="shadow-sm font-light focus:outline-none block w-full sm:text-sm border-gray-300 rounded-none"
-                      placeholder="Reason for suspension here ..."
-                    ></textarea>
-                  </div>
-                </div>
-              </div>
               <div className="pt-2 border-t border-gray-200 mt-5 flex justify-end">
                 <span className="inline-flex rounded-none shadow-sm mr-2 ">
                   <button
@@ -121,7 +97,7 @@ const SuspendAdmin: React.FC<Props> = ({ setShow, show, data, refetch }) => {
                     type="submit"
                     className="inline-flex items-center px-4 py-2 border border-transparent text-sm leading-5 font-light rounded-none text-white bg-red-500 hover:bg-red-400 focus:outline-none focus:shadow-outline-teal focus:border-red-600 active:bg-blue-600 transition duration-150 ease-in-out"
                   >
-                    {loading ? " Suspending..." : "Yes, suspend"}
+                    {loading ? " Restoring..." : "Yes, restore"}
                   </button>
                 </span>
               </div>
@@ -133,4 +109,4 @@ const SuspendAdmin: React.FC<Props> = ({ setShow, show, data, refetch }) => {
   );
 };
 
-export default SuspendAdmin;
+export default RestoreLawyer;

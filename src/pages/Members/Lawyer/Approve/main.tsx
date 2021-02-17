@@ -32,9 +32,7 @@ const ApproveLawyer: React.FC<Props> = ({ setShow, show, data, refetch }) => {
     })
       .then(() => {
         refetch();
-        toaster.success(
-          data?.user?.lastName + " has been approved successfully"
-        );
+        toaster.success("Lawyer has been approved successfully");
         setShow(false);
       })
       .catch((e: ApolloError) => {

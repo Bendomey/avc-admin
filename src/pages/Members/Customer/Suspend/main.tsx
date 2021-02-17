@@ -16,7 +16,7 @@ interface Props {
   data: any;
 }
 
-const SuspendAdmin: React.FC<Props> = ({ setShow, show, data, refetch }) => {
+const SuspendCustomer: React.FC<Props> = ({ setShow, show, data, refetch }) => {
   const [reason, setReason] = React.useState<string>("");
   const [suspendInvoker, { loading }] = useMutation<
     SuspendLawyersOutputProps,
@@ -34,7 +34,7 @@ const SuspendAdmin: React.FC<Props> = ({ setShow, show, data, refetch }) => {
     })
       .then(() => {
         refetch();
-        toaster.success("Lawyer has been suspended successfully");
+        toaster.success("Customer has been suspended successfully");
         setShow(false);
       })
       .catch((e: ApolloError) => {
@@ -74,10 +74,10 @@ const SuspendAdmin: React.FC<Props> = ({ setShow, show, data, refetch }) => {
           </div>
 
           <div className="mt-2 p-5">
-            <span className={"font-bold"}>Suspend Lawyer</span>
+            <span className={"font-bold"}>Suspend Customer</span>
             <div className="text-sm">
               <span>
-                Are you sure you want to suspend {data?.user?.lastName} ?
+                Are you sure you want to suspend {data?.user?.lastName}?
               </span>
             </div>
 
@@ -133,4 +133,4 @@ const SuspendAdmin: React.FC<Props> = ({ setShow, show, data, refetch }) => {
   );
 };
 
-export default SuspendAdmin;
+export default SuspendCustomer;
