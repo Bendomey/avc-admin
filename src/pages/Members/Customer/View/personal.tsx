@@ -58,7 +58,19 @@ const Personal: React.FC<Props> = ({ data }) => {
               </React.Fragment>
             </dd>
           </div>
-
+          <div className="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+            <dt className="text-sm font-medium text-gray-500">
+              Setup Completed
+            </dt>
+            <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+              {data?.user?.setupAt
+                ? `Done at ${format(
+                    new Date(data?.createdAt),
+                    "MMMM dd, yyyy hh:mm a"
+                  )}`
+                : "No"}
+            </dd>
+          </div>
           <div className="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
             <dt className="text-sm font-medium text-gray-500">Created At</dt>
             <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
