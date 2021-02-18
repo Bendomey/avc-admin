@@ -5,7 +5,7 @@ export interface Lawyer {
   addressCountry: string;
   addressCity: string;
   addressNumber: string;
-  addressStreetNumber: string;
+  addressStreetName: string;
   barMembershipCard: string;
   coverLetter: string;
   tin: string;

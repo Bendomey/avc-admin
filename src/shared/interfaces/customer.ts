@@ -6,7 +6,7 @@ export interface Customer {
   addressCountry: string;
   addressCity: string;
   addressNumber: string;
-  addressStreetNumber: string;
+  addressStreetName: string;
   digitalAddress: string;
   tin: string;
   type: string;

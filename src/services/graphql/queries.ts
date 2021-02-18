@@ -53,7 +53,7 @@ export const GET_LAWYERS = gql`
       addressCountry
       addressCity
       addressNumber
-      addressStreetNumber
+      addressStreetName
       barMembershipCard
       coverLetter
       approvedAt
@@ -92,7 +92,7 @@ export const GET_CUSTOMERS = gql`
       addressCountry
       addressCity
       addressNumber
-      addressStreetNumber
+      addressStreetName
       digitalAddress
       tin
       companyName

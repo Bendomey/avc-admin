@@ -26,7 +26,7 @@ const CustomerCard: React.FC<Props> = ({ data, edit, remove, view }) => {
                   data?.user?.otherNames || ""
                 }`,
                 {
-                  length: 20,
+                  length: 30,
                 }
               ) || "Not Speficied"}
             </span>
