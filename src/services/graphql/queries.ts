@@ -162,3 +162,29 @@ export const GET_FAQS = gql`
     faqsLength(filter: $filter)
   }
 `;
+
+//for blog posts
+export const GET_BLOG_POSTS = gql`
+  query($filter: GetBlogPostsFilter, $skip: Int, $limit: Int) {
+    posts(filter: $filter, pagination: { skip: $skip, limit: $limit }) {
+      id
+      title
+      details
+      image
+      status
+      tag {
+        id
+        name
+        createdAt
+        updatedAt
+      }
+      createdBy {
+        id
+        fullname
+      }
+      createdAt
+      updatedAt
+    }
+    postsLength(filter: $filter)
+  }
+`;
