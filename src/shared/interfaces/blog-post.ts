@@ -25,7 +25,7 @@ export interface Post {
 }
 
 export interface CreatePostInputProps {
-  name: string;
+  title: string;
   details: string;
   tag: string;
   status: string;
@@ -40,7 +40,7 @@ export interface CreatePostOutputProps {
 
 export interface UpdatePostInputProps {
   id: string;
-  name?: string;
+  title?: string;
   details?: string;
   tag?: string;
   status?: string;
