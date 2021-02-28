@@ -174,3 +174,50 @@ export const DELETE_FAQ = gql`
     deleteFaq(faqId: $id)
   }
 `;
+
+//for posts
+export const CREATE_POST = gql`
+  mutation(
+    $title: String!
+    $details: String!
+    $tag: ID!
+    $status: BlogPostStatus!
+    $image: String
+  ) {
+    createPost(
+      title: $title
+      details: $details
+      tag: $tag
+      status: $status
+      image: $image
+    ) {
+      id
+    }
+  }
+`;
+
+export const UPDATE_POST = gql`
+  mutation(
+    $id: ID!
+    $title: String
+    $details: String
+    $tag: ID
+    $status: BlogPostStatus
+    $image: String
+  ) {
+    updatePost(
+      postId: $id
+      title: $title
+      details: $details
+      tag: $tag
+      status: $status
+      image: $image
+    )
+  }
+`;
+
+export const DELETE_POST = gql`
+  mutation($id: ID!) {
+    deletePost(postId: $id)
+  }
+`;
