@@ -153,3 +153,24 @@ export const DELETE_LEGAL_AREA = gql`
     deleteLegalArea(legalAreaId: $id)
   }
 `;
+
+//for faqs
+export const CREATE_FAQ = gql`
+  mutation($question: String!, $answer: String!) {
+    createFaq(question: $question, answer: $answer) {
+      id
+    }
+  }
+`;
+
+export const UPDATE_FAQ = gql`
+  mutation($id: ID!, $question: String, $answer: String) {
+    updateFaq(faqId: $id, question: $question, answer: $answer)
+  }
+`;
+
+export const DELETE_FAQ = gql`
+  mutation($id: ID!) {
+    deleteFaq(faqId: $id)
+  }
+`;
