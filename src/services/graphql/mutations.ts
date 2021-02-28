@@ -106,3 +106,24 @@ export const APPROVE_LAWYER = gql`
     approveLawyer(lawyerId: $id)
   }
 `;
+
+//for tags
+export const CREATE_TAG = gql`
+  mutation($name: String!) {
+    createTag(name: $name) {
+      id
+    }
+  }
+`;
+
+export const UPDATE_TAG = gql`
+  mutation($name: String, $id: ID!) {
+    updateTag(name: $name, tagId: $id)
+  }
+`;
+
+export const DELETE_TAG = gql`
+  mutation($id: ID!) {
+    deleteTag(tagId: $id)
+  }
+`;

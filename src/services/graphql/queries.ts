@@ -108,3 +108,20 @@ export const GET_CUSTOMERS = gql`
     customersLength(filter: $filter)
   }
 `;
+
+//get tags
+export const GET_TAGS = gql`
+  query($skip: Int, $limit: Int, $filter: GetTagsFilter) {
+    tags(pagination: { skip: $skip, limit: $limit }, filter: $filter) {
+      id
+      name
+      createdBy {
+        id
+        fullname
+      }
+      createdAt
+      updatedAt
+    }
+    tagsLength(filter: $filter)
+  }
+`;
