@@ -144,3 +144,21 @@ export const GET_LEGAL_AREAS = gql`
     legalAreasLength(filter: $filter)
   }
 `;
+
+//for faqs
+export const GET_FAQS = gql`
+  query($filter: GetFAQsFilter, $skip: Int, $limit: Int) {
+    faqs(filter: $filter, pagination: { skip: $skip, limit: $limit }) {
+      id
+      question
+      answer
+      createdBy {
+        id
+        fullname
+      }
+      createdAt
+      updatedAt
+    }
+    faqsLength(filter: $filter)
+  }
+`;

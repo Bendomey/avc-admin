@@ -2,51 +2,41 @@ import { ApolloError, useMutation } from "@apollo/client";
 import { toaster } from "evergreen-ui";
 import * as React from "react";
 import { BasicModal } from "../../../components/atoms/modal";
-import { UPDATE_LEGAL_AREA } from "../../../services/graphql/mutations";
+import { CREATE_FAQ } from "../../../services/graphql/mutations";
 import _ from "lodash";
 import {
-  LegalArea,
-  UpdateLegalAreaInputProps,
-  UpdateLegalAreaOutputProps,
-} from "../../../shared/interfaces/legal-area";
+  CreateFAQInputProps,
+  CreateFAQOutputProps,
+} from "../../../shared/interfaces/faq";
 interface Props {
-  data: LegalArea | null;
   show: boolean;
   setShow: React.Dispatch<React.SetStateAction<boolean>>;
   refetch: any;
 }
 
-const AddCountry: React.FC<Props> = ({ setShow, show, refetch, data }) => {
-  const [description, setDescription] = React.useState<string>("");
-  const [name, setName] = React.useState<string>("");
-  const [id, setId] = React.useState<string>("");
-
-  React.useEffect(() => {
-    if (data) {
-      setName(data?.name);
-      setDescription(data?.description);
-      setId(data?.id);
-    }
-  }, [data]);
+const AddFaq: React.FC<Props> = ({ setShow, show, refetch }) => {
+  const [question, setQuestion] = React.useState<string>("");
+  const [answer, setAnswer] = React.useState<string>("");
 
   const [addInvoker, { loading }] = useMutation<
-    UpdateLegalAreaOutputProps,
-    UpdateLegalAreaInputProps
-  >(UPDATE_LEGAL_AREA);
+    CreateFAQOutputProps,
+    CreateFAQInputProps
+  >(CREATE_FAQ);
 
   const HandleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     addInvoker({
       variables: {
-        id,
-        name: name || undefined,
-        description: description || undefined,
+        question: question.trim(),
+        answer: answer.trim(),
       },
     })
       .then(() => {
         refetch();
-        toaster.success("Updated " + name + " successfully");
+        toaster.success("Faq Added successfully");
         setShow(false);
+        setAnswer("");
+        setQuestion("");
       })
       .catch((e: ApolloError) => {
         if (e?.graphQLErrors?.length > 0) {
@@ -85,7 +75,7 @@ const AddCountry: React.FC<Props> = ({ setShow, show, refetch, data }) => {
           </div>
 
           <div className="mt-2 p-5">
-            <span className={"font-bold"}>Update Legal Area</span>
+            <span className={"font-bold"}>Add New FAQ</span>
             <form onSubmit={HandleSubmit} className={"mt-3"}>
               <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-6">
                 <div className="sm:col-span-6">
@@ -93,19 +83,19 @@ const AddCountry: React.FC<Props> = ({ setShow, show, refetch, data }) => {
                     htmlFor="first_name"
                     className="block text-sm font-medium leading-5 text-gray-700"
                   >
-                    Area Name <span className={"text-red-400"}>*</span>
+                    Question <span className={"text-red-400"}>*</span>
                   </label>
                   <div className="mt-1 rounded-none shadow-sm">
-                    <input
-                      type="text"
+                    <textarea
+                      rows={5}
                       required
-                      value={name}
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                        setName(e.target.value);
+                      value={question}
+                      onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
+                        setQuestion(e.target.value);
                       }}
                       className="shadow-sm font-light focus:outline-none block w-full sm:text-sm border-gray-300 rounded-none"
-                      placeholder="Area name here ..."
-                    />
+                      placeholder="Question here ..."
+                    ></textarea>
                   </div>
                 </div>
                 <div className="sm:col-span-6">
@@ -113,17 +103,18 @@ const AddCountry: React.FC<Props> = ({ setShow, show, refetch, data }) => {
                     htmlFor="first_name"
                     className="block text-sm font-medium leading-5 text-gray-700"
                   >
-                    Description
+                    Answer <span className={"text-red-400"}>*</span>
                   </label>
                   <div className="mt-1 rounded-none shadow-sm">
                     <textarea
+                      required
                       rows={5}
-                      value={description}
+                      value={answer}
                       onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
-                        setDescription(e.target.value);
+                        setAnswer(e.target.value);
                       }}
                       className="shadow-sm font-light focus:outline-none block w-full sm:text-sm border-gray-300 rounded-none"
-                      placeholder="Description here ..."
+                      placeholder="Answer here ..."
                     ></textarea>
                   </div>
                 </div>
@@ -145,7 +136,7 @@ const AddCountry: React.FC<Props> = ({ setShow, show, refetch, data }) => {
                     type="submit"
                     className="inline-flex items-center px-4 py-2 border border-transparent text-sm leading-5 font-light rounded-none text-white bg-red-500 hover:bg-red-400 focus:outline-none focus:shadow-outline-teal focus:border-red-600 active:bg-blue-600 transition duration-150 ease-in-out"
                   >
-                    {loading ? "Updating..." : "Update Tag"}
+                    {loading ? "Adding..." : "Add Faq"}
                   </button>
                 </span>
               </div>
@@ -157,4 +148,4 @@ const AddCountry: React.FC<Props> = ({ setShow, show, refetch, data }) => {
   );
 };
 
-export default AddCountry;
+export default AddFaq;

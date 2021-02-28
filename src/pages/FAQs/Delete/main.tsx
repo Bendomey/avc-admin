@@ -1,51 +1,40 @@
-import { ApolloError, useMutation } from "@apollo/client";
-import { toaster } from "evergreen-ui";
+import { useMutation, ApolloError } from "@apollo/client";
 import * as React from "react";
 import { BasicModal } from "../../../components/atoms/modal";
-import { UPDATE_LEGAL_AREA } from "../../../services/graphql/mutations";
+import DeleteAsset from "../../../components/atoms/svgs/delete";
+import { DELETE_FAQ } from "../../../services/graphql/mutations";
+import { toaster } from "evergreen-ui";
 import _ from "lodash";
 import {
-  LegalArea,
-  UpdateLegalAreaInputProps,
-  UpdateLegalAreaOutputProps,
-} from "../../../shared/interfaces/legal-area";
+  DeleteFAQInputProps,
+  DeleteFAQOutputProps,
+  FAQ,
+} from "../../../shared/interfaces/faq";
+
 interface Props {
-  data: LegalArea | null;
   show: boolean;
   setShow: React.Dispatch<React.SetStateAction<boolean>>;
   refetch: any;
+  data: FAQ;
 }
 
-const AddCountry: React.FC<Props> = ({ setShow, show, refetch, data }) => {
-  const [description, setDescription] = React.useState<string>("");
-  const [name, setName] = React.useState<string>("");
-  const [id, setId] = React.useState<string>("");
-
-  React.useEffect(() => {
-    if (data) {
-      setName(data?.name);
-      setDescription(data?.description);
-      setId(data?.id);
-    }
-  }, [data]);
-
-  const [addInvoker, { loading }] = useMutation<
-    UpdateLegalAreaOutputProps,
-    UpdateLegalAreaInputProps
-  >(UPDATE_LEGAL_AREA);
+const DeleteCountry: React.FC<Props> = ({ setShow, show, data, refetch }) => {
+  const [deleteInvoker, { loading }] = useMutation<
+    DeleteFAQOutputProps,
+    DeleteFAQInputProps
+  >(DELETE_FAQ);
 
   const HandleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    addInvoker({
+
+    deleteInvoker({
       variables: {
-        id,
-        name: name || undefined,
-        description: description || undefined,
+        id: data?.id,
       },
     })
       .then(() => {
         refetch();
-        toaster.success("Updated " + name + " successfully");
+        toaster.success("FAQ has been deleted successfully");
         setShow(false);
       })
       .catch((e: ApolloError) => {
@@ -85,48 +74,14 @@ const AddCountry: React.FC<Props> = ({ setShow, show, refetch, data }) => {
           </div>
 
           <div className="mt-2 p-5">
-            <span className={"font-bold"}>Update Legal Area</span>
+            <span className={"font-bold"}>Delete Faq</span>
             <form onSubmit={HandleSubmit} className={"mt-3"}>
-              <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-6">
-                <div className="sm:col-span-6">
-                  <label
-                    htmlFor="first_name"
-                    className="block text-sm font-medium leading-5 text-gray-700"
-                  >
-                    Area Name <span className={"text-red-400"}>*</span>
-                  </label>
-                  <div className="mt-1 rounded-none shadow-sm">
-                    <input
-                      type="text"
-                      required
-                      value={name}
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                        setName(e.target.value);
-                      }}
-                      className="shadow-sm font-light focus:outline-none block w-full sm:text-sm border-gray-300 rounded-none"
-                      placeholder="Area name here ..."
-                    />
-                  </div>
-                </div>
-                <div className="sm:col-span-6">
-                  <label
-                    htmlFor="first_name"
-                    className="block text-sm font-medium leading-5 text-gray-700"
-                  >
-                    Description
-                  </label>
-                  <div className="mt-1 rounded-none shadow-sm">
-                    <textarea
-                      rows={5}
-                      value={description}
-                      onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
-                        setDescription(e.target.value);
-                      }}
-                      className="shadow-sm font-light focus:outline-none block w-full sm:text-sm border-gray-300 rounded-none"
-                      placeholder="Description here ..."
-                    ></textarea>
-                  </div>
-                </div>
+              <div className="flex items-center flex-col">
+                <DeleteAsset className={" h-40 w-40"} />
+                <span>
+                  Are you sure you want to delete `
+                  {_.truncate(data?.question, { length: 10 })}`
+                </span>
               </div>
               <div className="pt-2 border-t border-gray-200 mt-5 flex justify-end">
                 <span className="inline-flex rounded-none shadow-sm mr-2 ">
@@ -145,7 +100,7 @@ const AddCountry: React.FC<Props> = ({ setShow, show, refetch, data }) => {
                     type="submit"
                     className="inline-flex items-center px-4 py-2 border border-transparent text-sm leading-5 font-light rounded-none text-white bg-red-500 hover:bg-red-400 focus:outline-none focus:shadow-outline-teal focus:border-red-600 active:bg-blue-600 transition duration-150 ease-in-out"
                   >
-                    {loading ? "Updating..." : "Update Tag"}
+                    {loading ? " Deleting..." : "Yes, delete"}
                   </button>
                 </span>
               </div>
@@ -157,4 +112,4 @@ const AddCountry: React.FC<Props> = ({ setShow, show, refetch, data }) => {
   );
 };
 
-export default AddCountry;
+export default DeleteCountry;
