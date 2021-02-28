@@ -127,3 +127,29 @@ export const DELETE_TAG = gql`
     deleteTag(tagId: $id)
   }
 `;
+
+//for legal areas
+export const CREATE_LEGAL_AREA = gql`
+  mutation($name: String!, $description: String, $image: String) {
+    createLegalArea(name: $name, description: $description, image: $image) {
+      id
+    }
+  }
+`;
+
+export const UPDATE_LEGAL_AREA = gql`
+  mutation($id: ID!, $name: String, $description: String, $image: String) {
+    updateLegalArea(
+      legalAreaId: $id
+      name: $name
+      description: $description
+      image: $image
+    )
+  }
+`;
+
+export const DELETE_LEGAL_AREA = gql`
+  mutation($id: ID!) {
+    deleteLegalArea(legalAreaId: $id)
+  }
+`;
