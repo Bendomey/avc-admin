@@ -98,6 +98,7 @@ const Posts = () => {
           </React.Fragment>
         )}
       </div>
+
       <AddComponent show={add} setShow={setAdd} refetch={refetch} />
       <ViewComponent show={view} setShow={setView} data={selected} />
       <EditComponent
