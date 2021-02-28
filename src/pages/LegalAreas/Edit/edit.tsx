@@ -47,7 +47,6 @@ const AddCountry: React.FC<Props> = ({ setShow, show, refetch, data }) => {
         refetch();
         toaster.success("Updated " + name + " successfully");
         setShow(false);
-        setName("");
       })
       .catch((e: ApolloError) => {
         if (e?.graphQLErrors?.length > 0) {
