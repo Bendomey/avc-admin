@@ -16,7 +16,7 @@ import DeleteComponent from "./Delete";
 import AddComponent from "./Add";
 import ErrorAssetComponent from "../../components/atoms/alertComponents/error";
 
-const Overview = () => {
+const Tags = () => {
   const [add, setAdd] = React.useState<boolean>(false);
   const [selected, setSelected] = React.useState<any>(null);
   const [edit, setEdit] = React.useState<any>(null);
@@ -102,4 +102,4 @@ const Overview = () => {
   );
 };
 
-export default Overview;
+export default Tags;

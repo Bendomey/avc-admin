@@ -1,48 +1,41 @@
-import { ApolloError, useMutation } from "@apollo/client";
-import { toaster } from "evergreen-ui";
+import { useMutation, ApolloError } from "@apollo/client";
 import * as React from "react";
 import { BasicModal } from "../../../components/atoms/modal";
-import { UPDATE_TAG } from "../../../services/graphql/mutations";
+import DeleteAsset from "../../../components/atoms/svgs/delete";
+import { DELETE_LEGAL_AREA } from "../../../services/graphql/mutations";
+
+import { toaster } from "evergreen-ui";
 import _ from "lodash";
 import {
-  UpdateTagInputProps,
-  UpdateTagOutputProps,
-  Tag,
-} from "../../../shared/interfaces/tag";
+  DeleteLegalAreaInputProps,
+  DeleteLegalAreaOutputProps,
+  LegalArea,
+} from "../../../shared/interfaces/legal-area";
+
 interface Props {
-  data: Tag | null;
   show: boolean;
   setShow: React.Dispatch<React.SetStateAction<boolean>>;
   refetch: any;
+  data: LegalArea;
 }
 
-const AddCountry: React.FC<Props> = ({ setShow, show, refetch, data }) => {
-  const [name, setName] = React.useState<string>("");
-  const [id, setId] = React.useState<string>("");
-
-  React.useEffect(() => {
-    if (data) {
-      setName(data?.name);
-      setId(data?.id);
-    }
-  }, [data]);
-
-  const [addInvoker, { loading }] = useMutation<
-    UpdateTagOutputProps,
-    UpdateTagInputProps
-  >(UPDATE_TAG);
+const DeleteCountry: React.FC<Props> = ({ setShow, show, data, refetch }) => {
+  const [deleteInvoker, { loading }] = useMutation<
+    DeleteLegalAreaOutputProps,
+    DeleteLegalAreaInputProps
+  >(DELETE_LEGAL_AREA);
 
   const HandleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    addInvoker({
+
+    deleteInvoker({
       variables: {
-        id,
-        name: name || undefined,
+        id: data?.id,
       },
     })
       .then(() => {
         refetch();
-        toaster.success("Updated " + name + " successfully");
+        toaster.success(data?.name + " has been deleted successfully");
         setShow(false);
       })
       .catch((e: ApolloError) => {
@@ -82,29 +75,11 @@ const AddCountry: React.FC<Props> = ({ setShow, show, refetch, data }) => {
           </div>
 
           <div className="mt-2 p-5">
-            <span className={"font-bold"}>Update Tag</span>
+            <span className={"font-bold"}>Delete Legal Area</span>
             <form onSubmit={HandleSubmit} className={"mt-3"}>
-              <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-6">
-                <div className="sm:col-span-6">
-                  <label
-                    htmlFor="first_name"
-                    className="block text-sm font-medium leading-5 text-gray-700"
-                  >
-                    Tag <span className={"text-red-400"}>*</span>
-                  </label>
-                  <div className="mt-1 rounded-none shadow-sm">
-                    <input
-                      type="text"
-                      required
-                      value={name}
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                        setName(e.target.value);
-                      }}
-                      className="shadow-sm font-light focus:outline-none block w-full sm:text-sm border-gray-300 rounded-none"
-                      placeholder="tag name here ..."
-                    />
-                  </div>
-                </div>
+              <div className="flex items-center flex-col">
+                <DeleteAsset className={" h-40 w-40"} />
+                <span>Are you sure you want to delete `{data?.name}`</span>
               </div>
               <div className="pt-2 border-t border-gray-200 mt-5 flex justify-end">
                 <span className="inline-flex rounded-none shadow-sm mr-2 ">
@@ -123,7 +98,7 @@ const AddCountry: React.FC<Props> = ({ setShow, show, refetch, data }) => {
                     type="submit"
                     className="inline-flex items-center px-4 py-2 border border-transparent text-sm leading-5 font-light rounded-none text-white bg-red-500 hover:bg-red-400 focus:outline-none focus:shadow-outline-teal focus:border-red-600 active:bg-blue-600 transition duration-150 ease-in-out"
                   >
-                    {loading ? "Updating..." : "Update Tag"}
+                    {loading ? " Deleting..." : "Yes, delete"}
                   </button>
                 </span>
               </div>
@@ -135,4 +110,4 @@ const AddCountry: React.FC<Props> = ({ setShow, show, refetch, data }) => {
   );
 };
 
-export default AddCountry;
+export default DeleteCountry;

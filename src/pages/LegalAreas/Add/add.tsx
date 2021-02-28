@@ -2,48 +2,41 @@ import { ApolloError, useMutation } from "@apollo/client";
 import { toaster } from "evergreen-ui";
 import * as React from "react";
 import { BasicModal } from "../../../components/atoms/modal";
-import { UPDATE_TAG } from "../../../services/graphql/mutations";
+import { CREATE_LEGAL_AREA } from "../../../services/graphql/mutations";
 import _ from "lodash";
 import {
-  UpdateTagInputProps,
-  UpdateTagOutputProps,
-  Tag,
-} from "../../../shared/interfaces/tag";
+  CreateLegalAreaInputProps,
+  CreateLegalAreaOutputProps,
+} from "../../../shared/interfaces/legal-area";
 interface Props {
-  data: Tag | null;
   show: boolean;
   setShow: React.Dispatch<React.SetStateAction<boolean>>;
   refetch: any;
 }
 
-const AddCountry: React.FC<Props> = ({ setShow, show, refetch, data }) => {
+const AddCountry: React.FC<Props> = ({ setShow, show, refetch }) => {
   const [name, setName] = React.useState<string>("");
-  const [id, setId] = React.useState<string>("");
-
-  React.useEffect(() => {
-    if (data) {
-      setName(data?.name);
-      setId(data?.id);
-    }
-  }, [data]);
+  const [description, setDescription] = React.useState<string>("");
 
   const [addInvoker, { loading }] = useMutation<
-    UpdateTagOutputProps,
-    UpdateTagInputProps
-  >(UPDATE_TAG);
+    CreateLegalAreaOutputProps,
+    CreateLegalAreaInputProps
+  >(CREATE_LEGAL_AREA);
 
   const HandleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     addInvoker({
       variables: {
-        id,
-        name: name || undefined,
+        name: name.trim(),
+        description: description || undefined,
       },
     })
       .then(() => {
         refetch();
-        toaster.success("Updated " + name + " successfully");
+        toaster.success("Added " + name + " successfully");
         setShow(false);
+        setName("");
+        setDescription("");
       })
       .catch((e: ApolloError) => {
         if (e?.graphQLErrors?.length > 0) {
@@ -82,7 +75,7 @@ const AddCountry: React.FC<Props> = ({ setShow, show, refetch, data }) => {
           </div>
 
           <div className="mt-2 p-5">
-            <span className={"font-bold"}>Update Tag</span>
+            <span className={"font-bold"}>Add New Legal Area</span>
             <form onSubmit={HandleSubmit} className={"mt-3"}>
               <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-6">
                 <div className="sm:col-span-6">
@@ -90,7 +83,7 @@ const AddCountry: React.FC<Props> = ({ setShow, show, refetch, data }) => {
                     htmlFor="first_name"
                     className="block text-sm font-medium leading-5 text-gray-700"
                   >
-                    Tag <span className={"text-red-400"}>*</span>
+                    Area Name <span className={"text-red-400"}>*</span>
                   </label>
                   <div className="mt-1 rounded-none shadow-sm">
                     <input
@@ -101,8 +94,27 @@ const AddCountry: React.FC<Props> = ({ setShow, show, refetch, data }) => {
                         setName(e.target.value);
                       }}
                       className="shadow-sm font-light focus:outline-none block w-full sm:text-sm border-gray-300 rounded-none"
-                      placeholder="tag name here ..."
+                      placeholder="Area name here ..."
                     />
+                  </div>
+                </div>
+                <div className="sm:col-span-6">
+                  <label
+                    htmlFor="first_name"
+                    className="block text-sm font-medium leading-5 text-gray-700"
+                  >
+                    Description
+                  </label>
+                  <div className="mt-1 rounded-none shadow-sm">
+                    <textarea
+                      rows={5}
+                      value={description}
+                      onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
+                        setDescription(e.target.value);
+                      }}
+                      className="shadow-sm font-light focus:outline-none block w-full sm:text-sm border-gray-300 rounded-none"
+                      placeholder="Description here ..."
+                    ></textarea>
                   </div>
                 </div>
               </div>
@@ -123,7 +135,7 @@ const AddCountry: React.FC<Props> = ({ setShow, show, refetch, data }) => {
                     type="submit"
                     className="inline-flex items-center px-4 py-2 border border-transparent text-sm leading-5 font-light rounded-none text-white bg-red-500 hover:bg-red-400 focus:outline-none focus:shadow-outline-teal focus:border-red-600 active:bg-blue-600 transition duration-150 ease-in-out"
                   >
-                    {loading ? "Updating..." : "Update Tag"}
+                    {loading ? "Adding..." : "Add Area"}
                   </button>
                 </span>
               </div>
