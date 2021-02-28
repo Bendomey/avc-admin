@@ -125,3 +125,22 @@ export const GET_TAGS = gql`
     tagsLength(filter: $filter)
   }
 `;
+
+//get legal areas
+export const GET_LEGAL_AREAS = gql`
+  query($skip: Int, $limit: Int, $filter: GetLegalAreasFilter) {
+    legalAreas(pagination: { skip: $skip, limit: $limit }, filter: $filter) {
+      id
+      name
+      description
+      image
+      createdBy {
+        id
+        fullname
+      }
+      createdAt
+      updatedAt
+    }
+    legalAreasLength(filter: $filter)
+  }
+`;
