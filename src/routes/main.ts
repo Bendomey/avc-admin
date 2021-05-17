@@ -6,6 +6,7 @@ const Members = React.lazy(() => import("../pages/Members"));
 const Jobs = React.lazy(() => import("../pages/Jobs"));
 
 //configurations
+const Services = React.lazy(() => import("../pages/Services"));
 const Countries = React.lazy(() => import("../pages/Countries"));
 const LegalAreas = React.lazy(() => import("../pages/LegalAreas"));
 const Tags = React.lazy(() => import("../pages/Tags"));
@@ -31,6 +32,12 @@ const routes: RouteType[] = [
     exact: true,
     component: Jobs,
     path: "/jobs",
+  },
+  {
+    name: "Services",
+    exact: true,
+    component: Services,
+    path: "/services",
   },
   {
     name: "Countries",
