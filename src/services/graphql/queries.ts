@@ -1,8 +1,24 @@
 import { gql } from "@apollo/client";
 
+//get services
+export const GET_SERVICES = gql`
+  query ($filter: GetServicesFilter, $skip: Int, $limit: Int) {
+    services(filter: $filter, pagination: { skip: $skip, limit: $limit }) {
+      id
+      name
+      description
+      price
+      type
+      createdAt
+      updatedAt
+    }
+    servicesLength(filter: $filter)
+  }
+`;
+
 //get countries
 export const GET_COUNTRIES = gql`
-  query($filter: GetCountriesFilter, $skip: Int, $limit: Int) {
+  query ($filter: GetCountriesFilter, $skip: Int, $limit: Int) {
     countries(filter: $filter, pagination: { skip: $skip, limit: $limit }) {
       id
       name
@@ -17,7 +33,7 @@ export const GET_COUNTRIES = gql`
 
 //get admins
 export const GET_ADMINS = gql`
-  query($filter: GetAdminsFilter, $skip: Int, $limit: Int) {
+  query ($filter: GetAdminsFilter, $skip: Int, $limit: Int) {
     admins(filter: $filter, pagination: { skip: $skip, limit: $limit }) {
       id
       fullname
@@ -35,7 +51,7 @@ export const GET_ADMINS = gql`
 
 //get lawyers
 export const GET_LAWYERS = gql`
-  query($filter: GetLawyersFilter, $skip: Int, $limit: Int) {
+  query ($filter: GetLawyersFilter, $skip: Int, $limit: Int) {
     lawyers(filter: $filter, pagination: { skip: $skip, limit: $limit }) {
       id
       user {
@@ -74,7 +90,7 @@ export const GET_LAWYERS = gql`
 
 //get customers
 export const GET_CUSTOMERS = gql`
-  query($filter: GetCustomersFilter, $skip: Int, $limit: Int) {
+  query ($filter: GetCustomersFilter, $skip: Int, $limit: Int) {
     customers(filter: $filter, pagination: { skip: $skip, limit: $limit }) {
       id
       user {
@@ -111,7 +127,7 @@ export const GET_CUSTOMERS = gql`
 
 //get tags
 export const GET_TAGS = gql`
-  query($skip: Int, $limit: Int, $filter: GetTagsFilter) {
+  query ($skip: Int, $limit: Int, $filter: GetTagsFilter) {
     tags(pagination: { skip: $skip, limit: $limit }, filter: $filter) {
       id
       name
@@ -128,7 +144,7 @@ export const GET_TAGS = gql`
 
 //get legal areas
 export const GET_LEGAL_AREAS = gql`
-  query($skip: Int, $limit: Int, $filter: GetLegalAreasFilter) {
+  query ($skip: Int, $limit: Int, $filter: GetLegalAreasFilter) {
     legalAreas(pagination: { skip: $skip, limit: $limit }, filter: $filter) {
       id
       name
@@ -147,7 +163,7 @@ export const GET_LEGAL_AREAS = gql`
 
 //for faqs
 export const GET_FAQS = gql`
-  query($filter: GetFAQsFilter, $skip: Int, $limit: Int) {
+  query ($filter: GetFAQsFilter, $skip: Int, $limit: Int) {
     faqs(filter: $filter, pagination: { skip: $skip, limit: $limit }) {
       id
       question
@@ -165,7 +181,7 @@ export const GET_FAQS = gql`
 
 //for blog posts
 export const GET_BLOG_POSTS = gql`
-  query($filter: GetBlogPostsFilter, $skip: Int, $limit: Int) {
+  query ($filter: GetBlogPostsFilter, $skip: Int, $limit: Int) {
     posts(filter: $filter, pagination: { skip: $skip, limit: $limit }) {
       id
       title
