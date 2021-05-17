@@ -516,6 +516,21 @@ const SideNav = () => {
                   aria-labelledby="teams-headline"
                 >
                   <Link
+                    to="/services"
+                    className={`${
+                      pathname === "/services"
+                        ? "bg-gray-200"
+                        : "hover:text-gray-900 hover:bg-gray-50"
+                    } group flex items-center px-3 py-2 text-sm font-medium text-gray-700 rounded-md `}
+                  >
+                    <span
+                      className="w-2.5 h-2.5 mr-4 bg-black rounded-full"
+                      aria-hidden="true"
+                    ></span>
+                    <span className="truncate">Services</span>
+                  </Link>
+
+                  <Link
                     to="/countries"
                     className={`${
                       pathname === "/countries"
