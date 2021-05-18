@@ -1,3 +1,4 @@
+import { Service } from "./service";
 import { User } from "./shared";
 
 export interface Package {
@@ -26,16 +27,23 @@ export interface GetPackagesOutputProps {
 }
 
 // for adding
-// export interface CreatePackageInputProps {
-//   name: string;
-//   currency?: string;
-//   description?: string;
-//   image?: string;
-// }
+export interface CreatePackageInputProps {
+  name: string;
+  description?: string;
+  amountPerMonth: number;
+  amountPerYear: number;
+  packageServices: PackageService[];
+}
 
-// export interface CreatePackageOutputProps {
-//   createPackage: boolean;
-// }
+export interface PackageService {
+  serviceId: string;
+  quantity: number | undefined;
+  isActive: boolean | undefined;
+}
+
+export interface CreatePackageOutputProps {
+  createPackage: Package;
+}
 
 // for updating
 // export interface UpdatePackageInputProps {
@@ -58,3 +66,28 @@ export interface GetPackagesOutputProps {
 // export interface DeletePackageOutputProps {
 //   deletePackage: boolean;
 // }
+
+export interface IPackageService {
+  id: string;
+  package: Package;
+  service: Service;
+  isActive: boolean;
+  quantity: number;
+  type: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface GetPackageServicesInputProps {
+  filter?: {
+    package?: string;
+    service?: string;
+  };
+  skip?: number;
+  limit?: number;
+}
+
+export interface GetPackageServicesOutputProps {
+  packageServices: IPackageService[];
+  packageServicesLength: number;
+}
