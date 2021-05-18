@@ -1,5 +1,5 @@
 import * as React from "react";
-import ClipLoader from "react-spinners/ClipLoader";
+import PuffLoader from "react-spinners/PuffLoader";
 
 const DataLoader = () => {
   return (
@@ -15,7 +15,7 @@ const DataLoader = () => {
         }}
         className={"font-light"}
       >
-        <ClipLoader color={"#E21E47"} size={40} />
+        <PuffLoader color={"#E21E47"} size={40} />
       </div>
     </React.Fragment>
   );
