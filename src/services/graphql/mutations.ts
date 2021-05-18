@@ -239,3 +239,23 @@ export const UPDATE_SERVICE = gql`
     )
   }
 `;
+
+export const CREATE_PACKAGE = gql`
+  mutation (
+    $amountPerMonth: Int
+    $amountPerYear: Int
+    $name: String!
+    $description: String
+    $packageServices: [CustomPackageServices]!
+  ) {
+    createPackage(
+      amountPerMonth: $amountPerMonth
+      amountPerYear: $amountPerYear
+      name: $name
+      description: $description
+      packageServices: $packageServices
+    ) {
+      id
+    }
+  }
+`;
