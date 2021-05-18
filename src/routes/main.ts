@@ -4,6 +4,7 @@ import { RouteType } from "../shared/interfaces/misc";
 const Overview = React.lazy(() => import("../pages/Overview"));
 const Members = React.lazy(() => import("../pages/Members"));
 const Jobs = React.lazy(() => import("../pages/Jobs"));
+const Packages = React.lazy(() => import("../pages/Packages"));
 
 //configurations
 const Services = React.lazy(() => import("../pages/Services"));
@@ -32,6 +33,12 @@ const routes: RouteType[] = [
     exact: true,
     component: Jobs,
     path: "/jobs",
+  },
+  {
+    name: "Packages",
+    exact: true,
+    component: Packages,
+    path: "/packages",
   },
   {
     name: "Services",
