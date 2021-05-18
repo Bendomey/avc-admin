@@ -3,6 +3,7 @@ export interface Service {
   name: string;
   price: number;
   type: string;
+  variant: string;
   description: string;
   createdAt: Date;
   updatedAt: Date;

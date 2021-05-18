@@ -1,46 +1,63 @@
 import * as React from "react";
 import PackageCard from "./Card";
+import { EmptyAlertComponent } from "../../../components/atoms/alertComponents";
+import { useQuery } from "@apollo/client";
+import { DataLoader } from "../../../components/atoms/loadingComponents";
+import { GET_PACKAGES } from "../../../services/graphql/queries";
+import {
+  GetPackagesInputProps,
+  GetPackagesOutputProps,
+  Package,
+} from "../../../shared/interfaces/package";
+import ErrorAssetComponent from "../../../components/atoms/alertComponents/error";
 
 interface Props {}
 
-const tiers = [
-  {
-    name: "Hobby",
-    href: "#",
-    priceMonthly: 12,
-    description: "All the basics for starting a new business",
-    includedFeatures: [
-      "Potenti felis, in cras at at ligula nunc.",
-      "Orci neque eget pellentesque.",
-    ],
-  },
-  {
-    name: "Startup",
-    href: "#",
-    priceMonthly: 32,
-    description: "All the basics for starting a new business",
-    includedFeatures: [
-      "Potenti felis, in cras at at ligula nunc. ",
-      "Orci neque eget pellentesque.",
-      "Donec mauris sit in eu tincidunt etiam.",
-      "Faucibus volutpat magna.",
-    ],
-  },
-];
-
 const MainPackage: React.FC<Props> = () => {
+  const { data, loading } = useQuery<
+    GetPackagesOutputProps,
+    GetPackagesInputProps
+  >(GET_PACKAGES, {
+    variables: {
+      filter: {
+        type: "REQUESTED",
+      },
+    },
+  });
   return (
     <React.Fragment>
       <div className={" mx-5"}>
-        <div className="max-w-7xl pb-3 mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="mt-12 space-y-4 sm:mt-16 sm:space-y-0 sm:grid sm:grid-cols-2 sm:gap-6 lg:max-w-4xl lg:mx-auto xl:max-w-none xl:mx-0 xl:grid-cols-3">
-            {tiers.map((tier) => (
+        {loading ? (
+          <DataLoader />
+        ) : (
+          <React.Fragment>
+            {data ? (
               <React.Fragment>
-                <PackageCard data={tier} />
+                <div className="max-w-7xl pb-3 mx-auto px-4 sm:px-6 lg:px-8">
+                  {data?.packagesLength === 0 ? (
+                    <React.Fragment>
+                      <EmptyAlertComponent model={"requested packages"} />
+                    </React.Fragment>
+                  ) : (
+                    <React.Fragment>
+                      <div className="mt-12 space-y-4 sm:mt-16 sm:space-y-0 sm:grid sm:grid-cols-2 sm:gap-6 lg:max-w-4xl lg:mx-auto xl:max-w-none xl:mx-0 xl:grid-cols-3">
+                        {data?.packages.map((singlepackage: Package) => (
+                          <React.Fragment>
+                            <PackageCard data={singlepackage} />
+                          </React.Fragment>
+                        ))}
+                      </div>
+                    </React.Fragment>
+                  )}
+                </div>
               </React.Fragment>
-            ))}
-          </div>
-        </div>
+            ) : (
+              <React.Fragment>
+                <ErrorAssetComponent model={"requested packages"} />
+              </React.Fragment>
+            )}
+          </React.Fragment>
+        )}
       </div>
     </React.Fragment>
   );
