@@ -1,5 +1,13 @@
+import { useQuery } from "@apollo/client";
 import * as React from "react";
-import { Package } from "../../../../shared/interfaces/package";
+import { GET_PACKAGE_SERVICES } from "../../../../services/graphql/queries";
+import { Loader } from "../../../../components/atoms/loadingComponents";
+import {
+  GetPackageServicesInputProps,
+  GetPackageServicesOutputProps,
+  IPackageService,
+  Package,
+} from "../../../../shared/interfaces/package";
 
 interface Props {
   data: Package;
@@ -7,6 +15,16 @@ interface Props {
 }
 
 const PackageCard: React.FC<Props> = ({ data, period }) => {
+  const { data: packageServices, loading } = useQuery<
+    GetPackageServicesOutputProps,
+    GetPackageServicesInputProps
+  >(GET_PACKAGE_SERVICES, {
+    variables: {
+      filter: {
+        package: data?.id,
+      },
+    },
+  });
   return (
     <React.Fragment>
       <div className="border border-gray-200 rounded-lg shadow-sm divide-y divide-gray-200">
@@ -33,32 +51,54 @@ const PackageCard: React.FC<Props> = ({ data, period }) => {
             Delete {data?.name}
           </button>
         </div>
-        <div className="pt-6 pb-8 px-6">
-          <h3 className="text-xs font-medium text-gray-900 tracking-wide uppercase">
-            What's included
-          </h3>
-          <ul className="mt-6 space-y-4">
-            {/* {data.includedFeatures.map((feature: any) => (
-              <li key={feature} className="flex space-x-3">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="flex-shrink-0 h-5 w-5 text-green-500"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M5 13l4 4L19 7"
-                  />
-                </svg>
-                <span className="text-sm text-gray-500">{feature}</span>
-              </li>
-            ))} */}
-          </ul>
-        </div>
+        {loading ? (
+          <React.Fragment>
+            <div className={"py-5 flex justify-center"}>
+              <Loader />
+            </div>
+          </React.Fragment>
+        ) : (
+          <React.Fragment>
+            <div className="pt-6 pb-8 px-6">
+              <h3 className="text-xs font-medium text-gray-900 tracking-wide uppercase">
+                What's included
+              </h3>
+              <ul className="mt-6 space-y-4">
+                {packageServices?.packageServices?.map(
+                  (packageService: IPackageService, i: number) => (
+                    <li key={i} className="flex space-x-3">
+                      {packageService?.type === "BOOLEAN" ? (
+                        <React.Fragment>
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="flex-shrink-0 h-5 w-5 text-green-500"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M5 13l4 4L19 7"
+                            />
+                          </svg>
+                        </React.Fragment>
+                      ) : (
+                        <React.Fragment>
+                          <span>{packageService?.quantity || 0}</span>
+                        </React.Fragment>
+                      )}
+                      <span className="text-sm text-gray-500">
+                        {packageService?.service?.name}
+                      </span>
+                    </li>
+                  )
+                )}
+              </ul>
+            </div>
+          </React.Fragment>
+        )}
       </div>
     </React.Fragment>
   );
