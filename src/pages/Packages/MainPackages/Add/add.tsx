@@ -1,4 +1,12 @@
+import { useQuery } from "@apollo/client";
 import * as React from "react";
+import { Loader } from "../../../../components/atoms/loadingComponents";
+import { GET_SERVICES } from "../../../../services/graphql/queries";
+import {
+  GetServicesInputProps,
+  GetServicesOutputProps,
+  Service,
+} from "../../../../shared/interfaces/service";
 // import { CheckIcon } from "@heroicons/react/solid";
 
 const tier = {
@@ -19,6 +27,8 @@ interface Props {
 }
 
 const AddPackage: React.FC<Props> = ({ setAdd }) => {
+  const { data: services, loading } =
+    useQuery<GetServicesOutputProps, GetServicesInputProps>(GET_SERVICES);
   return (
     <React.Fragment>
       <div
@@ -67,33 +77,50 @@ const AddPackage: React.FC<Props> = ({ setAdd }) => {
             Cancel
           </button>
         </div>
-        <div className="pt-6 pb-8 px-6">
-          <h3 className="text-xs font-medium text-gray-900 tracking-wide uppercase">
-            What's included
-          </h3>
-          <ul className="mt-6 space-y-4">
-            {tier.includedFeatures.map((feature: string) => (
-              <li key={feature} className="flex space-x-3">
-                <div>
-                  {/* <input
-                    id="remember_me"
-                    name="remember_me"
-                    type="checkbox"
-                    className="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300 rounded"
-                  /> */}
-                  <input
-                    type="text"
-                    name="email"
-                    id="email"
-                    className="shadow-sm focus:ring-red-500 w-12 bg-gray-50 focus:border-red-500 block sm:text-sm border-gray-200 rounded-none"
-                    placeholder="No."
-                  />
-                </div>
-                <span className="text-sm text-gray-500">{feature}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
+        {loading ? (
+          <React.Fragment>
+            <div className={"py-5 flex justify-center"}>
+              <Loader />
+            </div>
+          </React.Fragment>
+        ) : (
+          <React.Fragment>
+            <div className="pt-6 pb-8 px-6">
+              <h3 className="text-xs font-medium text-gray-900 tracking-wide uppercase">
+                What's included
+              </h3>
+              <ul className="mt-6 space-y-4">
+                {services?.services.map((service: Service, i: number) => (
+                  <React.Fragment key={i}>
+                    <li className="flex space-x-3 items-center">
+                      <div>
+                        {service?.variant === "BOOLEAN" ? (
+                          <input
+                            id="remember_me"
+                            name="remember_me"
+                            type="checkbox"
+                            className="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300 rounded"
+                          />
+                        ) : (
+                          <input
+                            type="text"
+                            name="email"
+                            id="email"
+                            className="shadow-sm focus:ring-red-500 w-12 bg-gray-50 focus:border-red-500 block sm:text-sm border-gray-200 rounded-none"
+                            placeholder="No."
+                          />
+                        )}
+                      </div>
+                      <span className="text-sm text-gray-500">
+                        {service?.name}
+                      </span>
+                    </li>
+                  </React.Fragment>
+                ))}
+              </ul>
+            </div>
+          </React.Fragment>
+        )}
       </div>
     </React.Fragment>
   );
