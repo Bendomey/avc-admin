@@ -227,3 +227,28 @@ export const GET_PACKAGES = gql`
     packagesLength(filter: $filter)
   }
 `;
+
+export const GET_PACKAGE_SERVICES = gql`
+  query ($filter: GetPackageServicesFilter, $skip: Int, $limit: Int) {
+    packageServices(
+      filter: $filter
+      pagination: { skip: $skip, limit: $limit }
+    ) {
+      id
+      isActive
+      quantity
+      type
+      package {
+        id
+        name
+      }
+      service {
+        id
+        name
+      }
+      createdAt
+      updatedAt
+    }
+    packageServicesLength(filter: $filter)
+  }
+`;
