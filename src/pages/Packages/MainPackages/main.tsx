@@ -20,7 +20,7 @@ const MainPackage: React.FC<Props> = () => {
   const [period, setPeriod] = React.useState<"monthly" | "yearly">("monthly");
   const [add, setAdd] = React.useState<boolean>(false);
 
-  const { data, loading } = useQuery<
+  const { data, loading, refetch } = useQuery<
     GetPackagesOutputProps,
     GetPackagesInputProps
   >(GET_PACKAGES, {
@@ -41,7 +41,7 @@ const MainPackage: React.FC<Props> = () => {
             {data ? (
               <React.Fragment>
                 <div className="max-w-7xl pb-3 mx-auto px-4 sm:px-6 lg:px-8">
-                  {data?.packagesLength > 0 && (
+                  {data?.packagesLength === 0 && (
                     <div className="sm:flex sm:flex-col sm:align-center">
                       <SetPeriod period={period} setPeriod={setPeriod} />
                     </div>
@@ -53,7 +53,7 @@ const MainPackage: React.FC<Props> = () => {
                       </React.Fragment>
                     ))}
                     {add ? (
-                      <AddPackage setAdd={setAdd} />
+                      <AddPackage setAdd={setAdd} refetch={refetch} />
                     ) : (
                       <EmptyTemplate setAdd={setAdd} />
                     )}
