@@ -9,6 +9,7 @@ export const GET_SERVICES = gql`
       description
       price
       type
+      variant
       createdAt
       updatedAt
     }
@@ -202,5 +203,27 @@ export const GET_BLOG_POSTS = gql`
       updatedAt
     }
     postsLength(filter: $filter)
+  }
+`;
+
+//for packages
+export const GET_PACKAGES = gql`
+  query ($filter: GetPackagesFilter, $skip: Int, $limit: Int) {
+    packages(filter: $filter, pagination: { skip: $skip, limit: $limit }) {
+      id
+      name
+      amountPerYear
+      amountPerMonth
+      description
+      status
+      requestedBy {
+        id
+        lastName
+        otherNames
+      }
+      createdAt
+      updatedAt
+    }
+    packagesLength(filter: $filter)
   }
 `;
