@@ -9,6 +9,7 @@ import {
   UpdateServiceInputProps,
   UpdateServiceOutputProps,
 } from "../../../shared/interfaces/service";
+import { convertToCents, convertToDollars } from "../../../services/broker";
 
 interface Props {
   show: boolean;
@@ -32,7 +33,7 @@ const EditService: React.FC<Props> = ({ setShow, show, data, refetch }) => {
   React.useEffect(() => {
     if (data) {
       setName(data?.name);
-      setPrice((data?.price * 100).toString() || "");
+      setPrice(data?.price ? convertToDollars(data?.price).toString() : "");
       setDescription(data?.description || "");
       setType(data?.type || "");
     }
@@ -45,7 +46,7 @@ const EditService: React.FC<Props> = ({ setShow, show, data, refetch }) => {
       variables: {
         id: data?.id,
         name: name.trim(),
-        price: parseFloat(price) / 100 || undefined,
+        price: price ? convertToCents(parseFloat(price)) : undefined,
         description: description || undefined,
         type: type || undefined,
       },

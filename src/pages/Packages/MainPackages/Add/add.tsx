@@ -15,6 +15,7 @@ import {
   Service,
 } from "../../../../shared/interfaces/service";
 import _ from "lodash";
+import { convertToCents } from "../../../../services/broker";
 
 interface Props {
   setAdd: React.Dispatch<React.SetStateAction<boolean>>;
@@ -77,8 +78,8 @@ const AddPackage: React.FC<Props> = ({ setAdd, refetch }) => {
     invokeCreation({
       variables: {
         name,
-        amountPerMonth: parseFloat(pricePerMonth) / 100,
-        amountPerYear: parseFloat(pricePerYear) / 100,
+        amountPerMonth: convertToCents(parseFloat(pricePerMonth)),
+        amountPerYear: convertToCents(parseFloat(pricePerYear)),
         packageServices: newPackacages,
         description: description || undefined,
       },

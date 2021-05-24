@@ -8,6 +8,7 @@ import {
   IPackageService,
   Package,
 } from "../../../../shared/interfaces/package";
+import { convertToDollars } from "../../../../services/broker";
 
 interface Props {
   data: Package;
@@ -37,8 +38,8 @@ const PackageCard: React.FC<Props> = ({ data, period }) => {
             <span className="text-4xl font-extrabold text-gray-900">
               $
               {period === "monthly"
-                ? data?.amountPerMonth
-                : data?.amountPerYear}
+                ? convertToDollars(data?.amountPerMonth || 0)
+                : convertToDollars(data?.amountPerYear || 0)}
             </span>{" "}
             <span className="text-base font-medium text-gray-500">
               /{period === "monthly" ? "mon" : "year"}
