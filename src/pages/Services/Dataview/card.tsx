@@ -1,6 +1,7 @@
 import * as React from "react";
 import { format } from "date-fns";
 import { Service } from "../../../shared/interfaces/service";
+import { convertToDollars } from "../../../services/broker";
 
 interface Props {
   data: Service;
@@ -25,7 +26,7 @@ const ServiceCard: React.FC<Props> = ({ data, edit, remove, view }) => {
           </div>
         </td>
         <td className="px-6 py-3 text-sm text-gray-500 font-medium">
-          {(data?.price * 100)?.toFixed(2) || "N/A"}
+          {data?.price ? convertToDollars(data?.price) : "N/A"}
         </td>
         <td className="px-6 py-3 text-sm text-gray-500 font-medium">
           <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
