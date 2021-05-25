@@ -259,3 +259,17 @@ export const CREATE_PACKAGE = gql`
     }
   }
 `;
+
+export const APPROVE_CUSTOM_PACKAGE = gql`
+  mutation ApproveCustomPackages(
+    $id: ID!
+    $amountPerMonth: Int!
+    $amountPerYear: Int!
+  ) {
+    approveCustomPackage(
+      packageId: $id
+      amountPerYear: $amountPerYear
+      amountPerMonth: $amountPerMonth
+    )
+  }
+`;

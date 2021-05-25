@@ -41,7 +41,7 @@ const MainPackage: React.FC<Props> = () => {
             {data ? (
               <React.Fragment>
                 <div className="max-w-7xl pb-3 mx-auto px-4 sm:px-6 lg:px-8">
-                  {data?.packagesLength === 0 && (
+                  {data?.packagesLength !== 0 && (
                     <div className="sm:flex sm:flex-col sm:align-center">
                       <SetPeriod period={period} setPeriod={setPeriod} />
                     </div>

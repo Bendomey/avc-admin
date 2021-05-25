@@ -45,6 +45,16 @@ export interface CreatePackageOutputProps {
   createPackage: Package;
 }
 
+//for approving
+export interface ApproveCustomPackageInputProps {
+  id: string;
+  amountPerMonth: number;
+  amountPerYear: number;
+}
+export interface ApproveCustomPackageOutputProps {
+  ApproveCustomPackages: boolean;
+}
+
 // for updating
 // export interface UpdatePackageInputProps {
 //   id: string;

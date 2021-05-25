@@ -14,7 +14,7 @@ import ErrorAssetComponent from "../../../components/atoms/alertComponents/error
 interface Props {}
 
 const MainPackage: React.FC<Props> = () => {
-  const { data, loading } = useQuery<
+  const { data, loading, refetch } = useQuery<
     GetPackagesOutputProps,
     GetPackagesInputProps
   >(GET_PACKAGES, {
@@ -43,7 +43,10 @@ const MainPackage: React.FC<Props> = () => {
                       <div className="mt-12 space-y-4 sm:mt-16 sm:space-y-0 sm:grid sm:grid-cols-2 sm:gap-6 lg:max-w-4xl lg:mx-auto xl:max-w-none xl:mx-0 xl:grid-cols-3">
                         {data?.packages.map((singlepackage: Package) => (
                           <React.Fragment>
-                            <PackageCard data={singlepackage} />
+                            <PackageCard
+                              data={singlepackage}
+                              refetch={refetch}
+                            />
                           </React.Fragment>
                         ))}
                       </div>

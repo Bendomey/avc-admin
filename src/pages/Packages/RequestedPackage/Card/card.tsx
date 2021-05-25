@@ -1,19 +1,30 @@
 import * as React from "react";
 import { GET_PACKAGE_SERVICES } from "../../../../services/graphql/queries";
 import {
+  ApproveCustomPackageInputProps,
+  ApproveCustomPackageOutputProps,
   GetPackageServicesInputProps,
   GetPackageServicesOutputProps,
   IPackageService,
   Package,
 } from "../../../../shared/interfaces/package";
-import { useQuery } from "@apollo/client";
+import { ApolloError, useMutation, useQuery } from "@apollo/client";
 import { Loader } from "../../../../components/atoms/loadingComponents";
+import { APPROVE_CUSTOM_PACKAGE } from "../../../../services/graphql/mutations";
+import _ from "lodash";
+import { toaster } from "evergreen-ui";
+import { convertToCents } from "../../../../services/broker";
 
 interface Props {
   data: Package;
+  refetch: any;
 }
 
-const PackageCard: React.FC<Props> = ({ data }) => {
+const PackageCard: React.FC<Props> = ({ data, refetch }) => {
+  const [year, setYear] = React.useState<string>("");
+  const [month, setMonth] = React.useState<string>("");
+
+  // fetch package services
   const { data: packageServices, loading } = useQuery<
     GetPackageServicesOutputProps,
     GetPackageServicesInputProps
@@ -25,8 +36,30 @@ const PackageCard: React.FC<Props> = ({ data }) => {
     },
   });
 
+  // approve custom packages
+  const [approveInvoker, { loading: loadApprove }] = useMutation<
+    ApproveCustomPackageOutputProps,
+    ApproveCustomPackageInputProps
+  >(APPROVE_CUSTOM_PACKAGE);
+
   const handleSubmit = (e: any) => {
     e?.preventDefault();
+    approveInvoker({
+      variables: {
+        id: data?.id,
+        amountPerMonth: convertToCents(parseFloat(month)),
+        amountPerYear: convertToCents(parseFloat(year)),
+      },
+    })
+      .then(() => {
+        refetch();
+        toaster.success("Package has been approved");
+        setYear("");
+        setMonth("");
+      })
+      .catch((e: ApolloError) => {
+        toaster.danger(_.startCase(_.camelCase(e?.graphQLErrors[0]?.message)));
+      });
   };
   return (
     <React.Fragment>
@@ -42,6 +75,8 @@ const PackageCard: React.FC<Props> = ({ data }) => {
                 type="number"
                 step={0.01}
                 required
+                value={month}
+                onChange={(e) => setMonth(e?.target?.value)}
                 className="shadow-sm focus:ring-red-500 bg-gray-50 focus:border-red-500 block w-full sm:text-sm border-gray-200 rounded-none"
                 placeholder="Price per month here - required"
               />
@@ -51,13 +86,19 @@ const PackageCard: React.FC<Props> = ({ data }) => {
                 type="number"
                 required
                 step={0.01}
+                value={year}
+                onChange={(e) => setYear(e?.target?.value)}
                 className="shadow-sm focus:ring-red-500 bg-gray-50 focus:border-red-500 block w-full sm:text-sm border-gray-200 rounded-none"
                 placeholder="Price per year here - required"
               />
             </div>
 
-            <button className="mt-8 block w-full bg-red-600 border border-red-800 rounded-md py-2 text-sm font-semibold text-white text-center hover:bg-red-900">
-              Update {data.name}
+            <button
+              type={"submit"}
+              disabled={loadApprove}
+              className="mt-8 block w-full bg-red-600 border border-red-800 rounded-md py-2 text-sm font-semibold text-white text-center hover:bg-red-900"
+            >
+              {loadApprove ? `Updating ${data.name}...` : `Update ${data.name}`}
             </button>
           </form>
         </div>
