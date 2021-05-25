@@ -67,13 +67,17 @@ const AddPackage: React.FC<Props> = ({ setAdd, refetch }) => {
   const HandleSubmit = (e: any) => {
     e?.preventDefault();
     let newPackacages: PackageService[] = [];
-    packageServices?.map((ps) =>
-      newPackacages?.push({
-        serviceId: ps?.serviceId,
-        quantity: ps?.quantity ? ps?.quantity : undefined,
-        isActive: ps?.isActive ? true : undefined,
-      })
-    );
+    for (let index = 0; index < packageServices.length; index++) {
+      const element = packageServices[index];
+      if (!element?.quantity && !element?.isActive) continue;
+      // continue if none was affected
+      else
+        newPackacages?.push({
+          serviceId: element?.serviceId,
+          quantity: element?.quantity ? element?.quantity : undefined,
+          isActive: element?.isActive ? true : undefined,
+        });
+    }
 
     invokeCreation({
       variables: {
