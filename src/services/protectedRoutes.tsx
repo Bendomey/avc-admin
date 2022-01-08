@@ -16,7 +16,6 @@ const PrivateRoute = ({
     <Route
       path={path}
       exact={exact}
-      name={name}
       render={(props: any) => {
         let token = Auth.getCipher();
         if (!token) {
