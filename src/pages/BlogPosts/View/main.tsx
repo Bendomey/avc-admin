@@ -36,7 +36,10 @@ const ViewPosts: React.FC<Props> = ({ setShow, show, data }) => {
             </button>
           </div>
 
-          <div className="mt-2 p-2">
+          <div
+            style={{ maxHeight: "80vh" }}
+            className="mt-2 p-2 overflow-y-auto"
+          >
             <div className={""}>
               <div className={"flex w-full justify-center"}>
                 <img
@@ -70,10 +73,12 @@ const ViewPosts: React.FC<Props> = ({ setShow, show, data }) => {
                       <dt className="text-sm font-medium text-gray-500">
                         Details
                       </dt>
-                      <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                        {data?.details.replace(/(<([^>]+)>)/gi, "") ||
-                          "Not specified"}
-                      </dd>
+                      <dd
+                        dangerouslySetInnerHTML={{
+                          __html: data?.details,
+                        }}
+                        className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2"
+                      />
                     </div>
                   </dl>
                 </div>
